@@ -1,60 +1,55 @@
 var assert = require('assert');
 var Guid = require('guid');
 var Model = require('../index');
-var TestModel = require('./fixtures/testmodel');
-var id;
 
-var Test = {
-  create: function() {
-    var record = new TestModel({
-      name: "test model"
-    });
-    
-    record.save(function(e, result) {
-      id = result.id;
-      assert.equal(record.name, result.name);
-      assert.ok(Guid.isGuid(result.id));
-      assert.ok(result.dateCreated instanceof Date);
-      assert.ok(result.dateModified instanceof Date);
-      Test.get();
-    });
-  },
-  get: function() {
-    TestModel.find(id, function(e, result) {
-      assert.equal(id, result.id);
-      Test.update();
-    });
-  },
-  update: function() {
-    var newName = "new name";
-    TestModel.find(id, function(e, result) {
-      result.name = newName;
-      result.save(function(e, result) {
-        assert.equal(newName, result.name);
-        Test.verify();
-      });
-    });
-  },
-  verify: function() {
-    TestModel.find(id, function(e, result) {
-      assert.equal("new name", result.name);
-      Test.delete();
-    });
-  },
-  delete: function() {
-    TestModel.find(id, function(e, result) {
-      result.delete(Test.verifyDelete);
-    });
-  },
-  verifyDelete: function() {
-    TestModel.find(id, function(e, result) {
-      assert.ok(e instanceof Model.NotFound);
-    });
-  },
-  all: function() {},
-  dynamicFinders: function() {}
-};
+var TestModel;
+var id = 0;
 
 module.exports = {
-  'test suite': Test.create
+  '1': function() {
+
+    var TestModel = Model.create((function(){
+      var i = 0;
+      return {
+        fields: {
+          id: function() { i++; return i; },
+          username: undefined,
+          first: 'John',
+          last: 'Doe'
+        },
+        virtual: {
+          name: function() {
+            return ((this.first || '') + ' ' + (this.last || '')).trim();
+          }
+        }
+      };
+    })());
+    
+    assert.ok("id" in TestModel.prototype);
+    assert.ok("username" in TestModel.prototype);
+    assert.ok("first" in TestModel.prototype);
+    assert.ok("last" in TestModel.prototype);
+    assert.ok("name" in TestModel.prototype);
+    assert.ok("toJSON" in TestModel.prototype);
+    assert.equal(5, Object.keys(TestModel.prototype).length);
+
+    var instance = new TestModel({
+      first: "Rad"
+    });
+    
+    console.log(JSON.stringify(instance));
+    
+    assert.equal("Rad", instance.first);
+    assert.equal("Doe", instance.last);
+    assert.equal(undefined, instance.username);
+    assert.equal(1, instance.id);
+    assert.equal("Rad Doe", instance.name);
+    
+    instance.first = undefined;
+    instance.id = undefined;
+
+    assert.equal("John", instance.first);
+    assert.equal(2, instance.id);
+
+  }
 };
