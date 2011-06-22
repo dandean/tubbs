@@ -31,13 +31,12 @@ module.exports = {
     assert.ok("last" in TestModel.prototype);
     assert.ok("name" in TestModel.prototype);
     assert.ok("toJSON" in TestModel.prototype);
+    console.log(Object.keys(TestModel.prototype));
     assert.equal(5, Object.keys(TestModel.prototype).length);
 
     var instance = new TestModel({
       first: "Rad"
     });
-    
-    console.log(JSON.stringify(instance));
     
     assert.equal("Rad", instance.first);
     assert.equal("Doe", instance.last);
@@ -45,11 +44,18 @@ module.exports = {
     assert.equal(1, instance.id);
     assert.equal("Rad Doe", instance.name);
     
+    // Unset instance values so that their defaults come back.
     instance.first = undefined;
     instance.id = undefined;
 
-    assert.equal("John", instance.first);
-    assert.equal(2, instance.id);
-
+    assert.equal("John", instance.first, "`first` should be 'John' but is " + instance.first);
+    assert.equal(2, instance.id, 'default `id` should have been generated but was not, and is ' + instance.id);
+    
+    TestModel.all(function(e, result) {
+      console.log(e, result);
+    });
+    
+    instance.save();
+    instance.delete();
   }
 };
