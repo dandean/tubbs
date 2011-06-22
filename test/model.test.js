@@ -31,7 +31,6 @@ module.exports = {
     assert.ok("last" in TestModel.prototype);
     assert.ok("name" in TestModel.prototype);
     assert.ok("toJSON" in TestModel.prototype);
-    console.log(Object.keys(TestModel.prototype));
     assert.equal(5, Object.keys(TestModel.prototype).length);
 
     var instance = new TestModel({
@@ -52,10 +51,33 @@ module.exports = {
     assert.equal(2, instance.id, 'default `id` should have been generated but was not, and is ' + instance.id);
     
     TestModel.all(function(e, result) {
-      console.log(e, result);
+      // console.log(e, result);
     });
     
-    instance.save();
-    instance.delete();
+    TestModel.dataStore = new Model.MemoryStore({
+      1: {
+        id: 1,
+        username: 'one'
+      }
+    });
+
+    TestModel.find(1, function(e, result) {
+      assert.ok(result);
+      assert.equal(1, result.id);
+      assert.equal('one', result.username);
+    });
+    
+    var two = new TestModel({
+      id: 2,
+      username: 'two'
+    });
+    
+    two.save(function(e, result) {
+      TestModel.find(2, function(e, result) {
+        assert.ok(result);
+        assert.equal(2, result.id);
+        assert.equal('two', result.username);
+      });
+    });
   }
 };
