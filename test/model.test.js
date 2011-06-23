@@ -179,6 +179,8 @@ module.exports = {
 
     assert.equal('i can fly', model.power);
     assert.equal('i cannot swim', model.weakness);
+    
+    assert.ok(model instanceof TestModel3);
   },
   'class-level database methods': function() {},
   'instance-level database methods': function() {},
