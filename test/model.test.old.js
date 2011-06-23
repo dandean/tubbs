@@ -1,8 +1,8 @@
 var assert = require('assert');
-var Guid = require('guid');
-var Model = require('../index');
-var TestModel = require('./fixtures/testmodel');
-var id;
+// var Guid = require('guid');
+// var Model = require('../index');
+// var TestModel = require('./fixtures/testmodel');
+// var id;
 
 var Test = {
   create: function() {

@@ -1,5 +1,14 @@
-riakjs-model
+Model
 ============
+
+Roadmap
+-------
+
+* Unit Tests
+* Subclassing
+* Validation
+
+
 
 Provides a model abstraction around [riak-js](http://riakjs.org/).
 
