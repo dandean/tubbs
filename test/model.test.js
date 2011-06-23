@@ -140,12 +140,14 @@ module.exports = {
     assert.ok("last" in json);
   },
   'subclassing': function() {
+    // Subclass, adding a new property
     var TestModel2 = TestModel1.create({
       fields: {
         power: 'i can fly'
       }
     });
     
+    // Ensure that all parent properties AND the new property are in the model.
     var model = new TestModel2(); // id == 6
     assert.ok("id" in model);
     assert.ok("username" in model);
@@ -154,33 +156,43 @@ module.exports = {
     assert.ok("name" in model);
     assert.ok("power" in model);
     
+    // Check default value for new property
+    assert.equal('i can fly', model.power);
+    
+    // Override default value.
     model.power = 'i cannot fly';
     assert.equal('i cannot fly', model.power);
 
-    model.power = undefined;
-    assert.equal('i can fly', model.power);
-    
+    // Subclass the subclass, adding a new property
     var TestModel3 = TestModel2.create({
       fields: {
         weakness: 'i cannot swim'
       }
     });
     
+    // Set values for new properties...
     model = new TestModel3({ // id == 7
       power: 'punch hard',
       weakness: 'pizza'
     });
 
+    // Check local values of new properties
     assert.equal('punch hard', model.power);
     assert.equal('pizza', model.weakness);
     
+    // Unset local values...
     model.power = undefined;
     model.weakness = undefined;
 
+    // Check that defaults return...
     assert.equal('i can fly', model.power);
     assert.equal('i cannot swim', model.weakness);
     
+    // Check that subclasses are maintaining their inheritance chain.
     assert.ok(model instanceof TestModel3);
+    assert.ok(model instanceof TestModel2);
+    assert.ok(model instanceof TestModel1);
+    assert.ok(model instanceof Model);
   },
   'class-level database methods': function() {},
   'instance-level database methods': function() {},
