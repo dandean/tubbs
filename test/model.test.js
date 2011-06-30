@@ -6,6 +6,7 @@ var id = 0;
 var TestModel1 = Model.create((function(){
   var i = 0;
   return {
+    dataStore: new Model.MemoryStore(),
     fields: {
       id: function() {i++; return i; },
       username: undefined,
