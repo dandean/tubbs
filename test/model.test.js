@@ -22,7 +22,6 @@ var TestModel1 = Model.create((function(){
 
 module.exports = {
   'model definition': function() {
-    // debugger;
     // Check for the presence of all defined model properties (virtual and real)
     assert.ok("id" in TestModel1.prototype);
     assert.ok("username" in TestModel1.prototype);
@@ -106,7 +105,7 @@ module.exports = {
     // Check default value for new property
     assert.equal('i can fly', model.power);
     
-      // Override default value.
+    // Override default value.
     model.power = 'i cannot fly';
     assert.equal('i cannot fly', model.power);
 
