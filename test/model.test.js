@@ -7,7 +7,7 @@ var TestModel1 = Model.create((function(){
   var i = 0;
   return {
     fields: {
-      id: function() { i++; return i; },
+      id: function() {i++; return i; },
       username: undefined,
       first: 'John',
       last: 'Doe'
@@ -21,62 +21,8 @@ var TestModel1 = Model.create((function(){
 })());
 
 module.exports = {
-  '1': function() {
-    // var instance = new TestModel1({
-    //   first: "Rad"
-    // });
-    // 
-    // // Check that property defaults are used when value's are not specified.
-    // assert.equal("Rad", instance.first);
-    // assert.equal("Doe", instance.last);
-    // assert.equal(undefined, instance.username);
-    // assert.equal(1, instance.id);
-    // assert.equal("Rad Doe", instance.name);
-    // 
-    // // Unset instance values so that their defaults come back.
-    // instance.first = undefined;
-    // instance.id = undefined;
-    // 
-    // // Check that default values are returned when local values are set to `undefined`.
-    // assert.equal("John", instance.first, "`first` should be 'John' but is " + instance.first);
-    // assert.equal(2, instance.id, 'default `id` should have been generated but was not, and is ' + instance.id);
-    // 
-    // // Use a real dataStore in order to check db methods.
-    // TestModel1.dataStore = new Model.MemoryStore({
-    //   1: {
-    //     id: 1,
-    //     username: 'one'
-    //   }
-    // });
-    // 
-    // TestModel1.find(1, function(e, result) {
-    //   assert.ok(result, '`result` should have a value but does not: ' + result);
-    //   assert.equal(1, result.id, '`result.id` should be the same as what was searched for.');
-    //   assert.equal('one', result.username, '`result.username` should be "one"');
-    // });
-    // 
-    // var two = new TestModel1({
-    //   id: 2,
-    //   username: 'two'
-    // });
-    // 
-    // two.save(function(e, result) {
-    //   TestModel1.find(2, function(e, result) {
-    //     assert.ok(result, 'result should have been found.');
-    //     assert.equal(2, result.id, 'result.id should have been 2.');
-    //     assert.equal('two', result.username, 'result.username should have been "two".');
-    //     
-    //     result.delete(function(e, result) {
-    // 
-    //       TestModel1.find(2, function(e, result) {
-    //         assert.ok(result === null, 'result.id should have been deleted from the dataStore.');
-    //       });
-    //     });
-    //   });
-    // });
-  },
-
   'model definition': function() {
+    // debugger;
     // Check for the presence of all defined model properties (virtual and real)
     assert.ok("id" in TestModel1.prototype);
     assert.ok("username" in TestModel1.prototype);
@@ -90,6 +36,7 @@ module.exports = {
     // Check for presence of defined properties on instance...
     var model = new TestModel1(); // id == 1
     
+    assert.equal(1, model.id);
     assert.ok("id" in model);
     assert.ok("username" in model);
     assert.ok("first" in model);
@@ -100,7 +47,7 @@ module.exports = {
     var model = new TestModel1(); // id == 2
     
     // Check all default values...
-    assert.equal(1, model.id);
+    assert.equal(2, model.id);
     assert.equal(undefined, model.username);
     assert.equal('John', model.first);
     assert.equal('Doe', model.last);
@@ -118,7 +65,7 @@ module.exports = {
     
     // Check function-type defaults for re-execution...
     model.id = undefined; // id == 3
-    assert.equal(2, model.id, 'Function-default should have executed, incrementing the ID.');
+    assert.equal(3, model.id, 'Function-default should have executed, incrementing the ID.');
 
     // Instantiate with a non-default value...
     model = new TestModel1({ first: 'Rad' }); // id == 4
@@ -159,7 +106,7 @@ module.exports = {
     // Check default value for new property
     assert.equal('i can fly', model.power);
     
-    // Override default value.
+      // Override default value.
     model.power = 'i cannot fly';
     assert.equal('i cannot fly', model.power);
 
@@ -175,6 +122,7 @@ module.exports = {
       power: 'punch hard',
       weakness: 'pizza'
     });
+    
 
     // Check local values of new properties
     assert.equal('punch hard', model.power);
@@ -185,7 +133,7 @@ module.exports = {
     model.weakness = undefined;
 
     // Check that defaults return...
-    assert.equal('i can fly', model.power);
+    assert.equal('i can fly', model.power, "Power was deleted so should be the default but is ", model.power);
     assert.equal('i cannot swim', model.weakness);
     
     // Check that subclasses are maintaining their inheritance chain.
