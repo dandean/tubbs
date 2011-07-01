@@ -43,6 +43,7 @@ module.exports = {
     assert.ok("last" in model);
     assert.ok("name" in model);
   },
+
   'default property values': function() {
     var model = new TestModel1(); // id == 2
     
@@ -77,6 +78,7 @@ module.exports = {
     assert.equal('John', model.first);
     assert.equal('John Doe', model.name);
   },
+
   'json serialization': function() {
     var model = new TestModel1(); // id == 5
     var json = model.toJSON();
@@ -86,6 +88,7 @@ module.exports = {
     assert.ok("first" in json);
     assert.ok("last" in json);
   },
+
   'subclassing': function() {
     // Subclass, adding a new property
     var TestModel2 = TestModel1.create({
@@ -142,7 +145,94 @@ module.exports = {
     assert.ok(model instanceof TestModel1);
     assert.ok(model instanceof Model);
   },
-  'class-level database methods': function() {},
-  'instance-level database methods': function() {},
-  'validation': function() {}
+
+  'class-level database methods': function() {
+    TestModel1.save(new TestModel1({
+      username: "userone",
+      first: "User",
+      last: "One"
+    }), createUserTwo);
+    
+    function createUserTwo() {
+      TestModel1.save(new TestModel1({
+        username: "usertwo",
+        first: "User",
+        last: "Two"
+      }), getAllRecords);
+    }
+    
+    function getAllRecords(e, result) {
+      TestModel1.all(function(e, all) {
+        assert.equal(2, all.length);
+        findRecord(all[0].id);
+      });
+    }
+    
+    function findRecord(id) {
+      TestModel1.find(id, function(e, record) {
+        assert.ok(record instanceof Model && record instanceof TestModel1);
+        assert.equal("userone", record.username);
+        
+        getByWhereClause();
+      });
+    }
+    
+    function findUserOneAndTwo(userData) {
+      return userData.username && userData.username.match(/user(one|two)/);
+    }
+    
+    function getByWhereClause() {
+      TestModel1.where(findUserOneAndTwo, assertWhereClauseResult);
+    }
+    
+    function assertWhereClauseResult(e, result) {
+      assert.ok(result[0] instanceof Model && result[0] instanceof TestModel1);
+      assert.ok(result[1] instanceof Model && result[1] instanceof TestModel1);
+      assert.equal(result.length, 2);
+      
+      deleteRecord(result[0].id);
+    }
+    
+    function deleteRecord(id) {
+      TestModel1.delete(id, function(e, result) {
+        TestModel1.where(findUserOneAndTwo, assertUserDeleted);
+      });
+    }
+    
+    function assertUserDeleted(e, result) {
+      assert.ok(result[0] instanceof Model && result[0] instanceof TestModel1);
+      assert.equal(result.length, 1);
+    }
+  },
+
+  'instance-level database methods': function() {
+    new TestModel1({
+      username: "userthree",
+      first: "User",
+      last: "Three"
+    }).save(function(e, result) {
+      findRecord(result.id);
+    });
+    
+    function findRecord(id) {
+      TestModel1.find(id, function(e, record) {
+        assert.ok(record instanceof Model && record instanceof TestModel1);
+        assert.equal("userthree", record.username);
+
+        record.delete(function(e, result) {
+          TestModel1.find(id, assertUserDeleted);
+        });
+
+      });
+    }
+
+    function assertUserDeleted(e, result) {
+      assert.ok(e instanceof Error);
+      assert.equal(e.message, 'Document not found.');
+      assert.equal(null, result);
+    }
+  },
+
+  'validation': function() {
+  }
 };
