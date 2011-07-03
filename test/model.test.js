@@ -259,6 +259,10 @@ module.exports = {
           max: 20,
           tooShortMessage: 'Too damn short!',
           tooLongMessage: 'Too darn long!!!'
+        }),
+        Model.Validate.formatOf("username", {
+          with: /@/,
+          without: /[0-9]/
         })//,
         // 
         // Model.Validates.custom('username', function(value, callback) {
