@@ -254,12 +254,15 @@ module.exports = {
         // executed on MyModel.find(id, cb), for instance.
         // Model.Validates.uniquenessOf("id"),
         
+        Model.Validate.confirmationOf("username"),
+
         Model.Validate.lengthOf("username", {
           min: 4,
           max: 20,
           tooShortMessage: 'Too damn short!',
           tooLongMessage: 'Too darn long!!!'
         }),
+
         Model.Validate.formatOf("username", {
           with: /@/,
           without: /[0-9]/
@@ -271,11 +274,12 @@ module.exports = {
       ]
     });
     
-    var m = new TestModel1({ username: "i" });
-
+    var m = new TestModel1();
+    
     m.validate(function(e, success) {
       console.log(e, success, m.errors);
       m.username = 'asdfasdfasdf';
+      // m.usernameConfirmation = 'asdfasdfasdf';
 
       m.validate(function(e, success) {
         console.log(e, success, m.errors);
