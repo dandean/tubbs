@@ -233,57 +233,5 @@ module.exports = {
     }
   },
 
-  'generated (schema-based) database methods': function() {},
-
-  'validation': function() {
-    // return;
-    var TestModel1 = Model.create({
-      dataStore: new Model.MemoryStore(),
-      fields: {
-        id: Guid.raw,
-        username: undefined,
-        first: 'John',
-        last: 'Doe'
-      },
-      
-      // `Validates.*` methods are factories which return an async function. These
-      // functions are then called with the instance as `this`. Functions are
-      // stored in a queue based on their event name ('on', for instance).
-      validation: [
-        // uniquenessOf: would need to refactor internals so that this isn't
-        // executed on MyModel.find(id, cb), for instance.
-        // Model.Validates.uniquenessOf("id"),
-        
-        Model.Validate.confirmationOf("username"),
-
-        Model.Validate.lengthOf("username", {
-          min: 4,
-          max: 20,
-          tooShortMessage: 'Too damn short!',
-          tooLongMessage: 'Too darn long!!!'
-        }),
-
-        Model.Validate.formatOf("username", {
-          with: /@/,
-          without: /[0-9]/
-        })//,
-        // 
-        // Model.Validates.custom('username', function(value, callback) {
-        //   callback(null, value != 'admin');
-        // }, { on: 'create' })
-      ]
-    });
-    
-    var m = new TestModel1();
-    
-    m.validate(function(e, success) {
-      console.log(e, success, m.errors);
-      m.username = 'asdfasdfasdf';
-      // m.usernameConfirmation = 'asdfasdfasdf';
-
-      m.validate(function(e, success) {
-        console.log(e, success, m.errors);
-      });
-    });
-  }
+  'generated (schema-based) database methods': function() {}
 };
