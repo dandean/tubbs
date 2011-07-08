@@ -4,13 +4,12 @@ var Model = require('../index');
 
 module.exports = {
   'validation - required': function() {
-    var TestModel1, m;
+    var TestModel, m;
     
     createModelScaffold();
 
     function createModelScaffold() {
-      TestModel1 = Model.create({
-        dataStore: new Model.MemoryStore(),
+      TestModel = Model.create({
         fields: {
           id: Guid.raw,
           username: undefined
@@ -23,7 +22,7 @@ module.exports = {
     }
     
     function validateWithUsernameAsUndefined() {
-      m = new TestModel1();
+      m = new TestModel();
       m.validate(function(e, success) {
         assert.ok(e instanceof Error);
         assert.ok('username' in m.errors);
@@ -54,6 +53,173 @@ module.exports = {
     
     function validateWithUsernamePresent() {
       m.username = 'some username';
+      m.validate(function(e, success) {
+        assert.equal(null, e);
+        assert.ok('username' in m.errors === false);
+      });
+    }
+  },
+  
+  'validate - length': function() {
+    var TestModel, m;
+    
+    createModelScaffoldWithInvalidOptions();
+
+    function createModelScaffoldWithInvalidOptions() {
+      assert.throws( function() {
+        TestModel = Model.create({
+          fields: {
+            id: Guid.raw,
+            username: undefined
+          },
+          validation: [
+            // This validator should throw an Error when it is created
+            Model.Validate.lengthOf("username")
+          ]
+        });
+      } );
+      
+      createModelScaffoldWithMinValue();
+    }
+    
+    // OPTION: MIN
+    
+    function createModelScaffoldWithMinValue() {
+      TestModel = Model.create({
+        fields: {
+          id: Guid.raw,
+          username: undefined
+        },
+        validation: [
+          Model.Validate.lengthOf("username", { min: 5 })
+        ]
+      });
+      
+      validateMinLengthAgainstNoValue();
+    }
+    
+    function validateMinLengthAgainstNoValue() {
+      m = new TestModel();
+      m.validate(function(e, success) {
+        assert.ok(e instanceof Error);
+        assert.ok('username' in m.errors);
+        assert.equal('"username" is the wrong length', m.errors.username[0]);
+        validateMinLengthAgainstValueTooShort();
+      });
+    }
+    
+    function validateMinLengthAgainstValueTooShort() {
+      m.username = 'hi';
+      m.validate(function(e, success) {
+        assert.ok(e instanceof Error);
+        assert.ok('username' in m.errors);
+        assert.equal('"username" is the wrong length', m.errors.username[0]);
+        validateMinLengthAgainstValidValue();
+      });
+    }
+    
+    function validateMinLengthAgainstValidValue() {
+      m.username = 'hello';
+      m.validate(function(e, success) {
+        assert.equal(null, e);
+        assert.ok('username' in m.errors === false);
+        
+        createModelScaffoldWithMaxValue();
+      });
+    }
+    
+    // OPTION: MAX
+
+    function createModelScaffoldWithMaxValue() {
+      TestModel = Model.create({
+        fields: {
+          id: Guid.raw,
+          username: undefined
+        },
+        validation: [
+          Model.Validate.lengthOf("username", { max: 5 })
+        ]
+      });
+      
+      validateMaxLengthAgainstNoValue();
+    }
+
+    function validateMaxLengthAgainstNoValue() {
+      m = new TestModel();
+      m.validate(function(e, success) {
+        assert.equal(null, e);
+        assert.ok('username' in m.errors === false);
+        validateMaxLengthAgainstValueTooLong();
+      });
+    }
+    
+    function validateMaxLengthAgainstValueTooLong() {
+      m.username = 'hello!';
+      m.validate(function(e, success) {
+        assert.ok(e instanceof Error);
+        assert.ok('username' in m.errors);
+        assert.equal('"username" is the wrong length', m.errors.username[0]);
+        validateMaxLengthAgainstValidValue();
+      });
+    }
+    
+    function validateMaxLengthAgainstValidValue() {
+      m.username = 'hi';
+      m.validate(function(e, success) {
+        assert.equal(null, e);
+        assert.ok('username' in m.errors === false);
+        createModelScaffoldWithMinAndMax();
+      });
+    }
+
+    // OPTION: MIN, MAX
+
+    function createModelScaffoldWithMinAndMax() {
+      TestModel = Model.create({
+        fields: {
+          id: Guid.raw,
+          username: undefined
+        },
+        validation: [
+          Model.Validate.lengthOf("username", { min: 2, max: 5 })
+        ]
+      });
+      
+      validateMinAndMaxLengthAgainstNoValue();
+    }
+
+    function validateMinAndMaxLengthAgainstNoValue() {
+      m = new TestModel();
+      m.validate(function(e, success) {
+        assert.ok(e instanceof Error);
+        assert.ok('username' in m.errors);
+        assert.equal('"username" is the wrong length', m.errors.username[0]);
+        validateMinAndMaxLengthAgainstValueTooLong();
+      });
+    }
+    
+    function validateMinAndMaxLengthAgainstValueTooLong() {
+      m.username = 'hello!';
+      m.validate(function(e, success) {
+        assert.ok(e instanceof Error);
+        assert.ok('username' in m.errors);
+        assert.equal('"username" is the wrong length', m.errors.username[0]);
+        validateMinAndMaxLengthAgainstValueTooShort();
+      });
+    }
+    
+    function validateMinAndMaxLengthAgainstValueTooShort() {
+      m.username = 'h';
+      m.validate(function(e, success) {
+        assert.ok(e instanceof Error);
+        assert.ok('username' in m.errors);
+        assert.equal('"username" is the wrong length', m.errors.username[0]);
+        validateMinAndMaxLengthAgainstValidValue();
+      });
+    }
+    
+    function validateMinAndMaxLengthAgainstValidValue() {
+      m.username = 'wow';
       m.validate(function(e, success) {
         assert.equal(null, e);
         assert.ok('username' in m.errors === false);
