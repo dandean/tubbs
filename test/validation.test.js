@@ -2,6 +2,8 @@ var assert = require('assert');
 var Guid = require('guid');
 var Model = require('../index');
 
+// TODO: validate length with allowUndefined and allowNull options...
+
 module.exports = {
   'validation - required': function() {
     var TestModel, m;
@@ -222,6 +224,82 @@ module.exports = {
       m.username = 'wow';
       m.validate(function(e, success) {
         assert.equal(null, e);
+        assert.ok('username' in m.errors === false);
+        createModelScaffoldWithMinAndMaxAllowingUndefined();
+      });
+    }
+
+    // OPTION: MIN, MAX with allowUndefined
+
+    function createModelScaffoldWithMinAndMaxAllowingUndefined() {
+      TestModel = Model.create({
+        fields: {
+          id: Guid.raw,
+          username: undefined
+        },
+        validation: [
+          Model.Validate.lengthOf("username", {
+            min: 2,
+            max: 5,
+            allowUndefined: true
+          })
+        ]
+      });
+      
+      validateUndefinedWithAllowUndefined();
+    }
+
+    function validateUndefinedWithAllowUndefined() {
+      m = new TestModel();
+      m.validate(function(e, success) {
+        assert.equal(e, null);
+        assert.ok('username' in m.errors === false);
+        validateNullWithAllowUndefined();
+      });
+    }
+
+    function validateNullWithAllowUndefined() {
+      m = new TestModel();
+      m.username = null;
+      m.validate(function(e, success) {
+        assert.ok(e instanceof Error);
+        assert.ok('username' in m.errors);
+        // validateMinAndMaxLengthAgainstValueTooLong();
+      });
+    }
+
+    function createModelScaffoldWithMinAndMaxAllowingNull() {
+      TestModel = Model.create({
+        fields: {
+          id: Guid.raw,
+          username: undefined
+        },
+        validation: [
+          Model.Validate.lengthOf("username", {
+            min: 2,
+            max: 5,
+            allowNull: true
+          })
+        ]
+      });
+      
+      validateUndefinedWithAllowNull();
+    }
+
+    function validateUndefinedWithAllowNull() {
+      m = new TestModel();
+      m.validate(function(e, success) {
+        assert.ok(e instanceof Error);
+        assert.ok('username' in m.errors);
+        validateNullWithAllowNull();
+      });
+    }
+
+    function validateNullWithAllowNull() {
+      m = new TestModel();
+      m.username = null;
+      m.validate(function(e, success) {
+        assert.equal(e, null);
         assert.ok('username' in m.errors === false);
       });
     }
