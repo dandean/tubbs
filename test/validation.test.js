@@ -303,5 +303,9 @@ module.exports = {
         assert.ok('username' in m.errors === false);
       });
     }
+  },
+
+  'validate - format': function() {
+    
   }
 };
