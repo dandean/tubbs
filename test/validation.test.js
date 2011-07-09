@@ -2,7 +2,30 @@ var assert = require('assert');
 var Guid = require('guid');
 var Model = require('../index');
 
-// TODO: validate length with allowUndefined and allowNull options...
+// TODO: validate format
+
+var m;
+
+function FAIL(cb, log) {
+  return function(e, success) {
+    if (log) console.log(e, success, m.errors);
+    assert.ok(e instanceof Error);
+    assert.ok("username" in m.errors === true);
+    assert.equal(1, m.errors.username.length);
+    if (cb) cb();
+  };
+}
+
+function PASS(cb, log) {
+  return function(e, success) {
+    if (log) console.log(e, success, m.errors);
+    assert.equal(null, e);
+    assert.ok("username" in m.errors === false);
+    if (cb) cb();
+  };
+}
+
+
 
 module.exports = {
   'validation - required': function() {
@@ -63,7 +86,7 @@ module.exports = {
   },
   
   'validate - length': function() {
-    var TestModel, m;
+    var TestModel;
     
     createModelScaffoldWithInvalidOptions();
 
@@ -229,7 +252,7 @@ module.exports = {
       });
     }
 
-    // OPTION: MIN, MAX with allowUndefined
+    // OPTION: MIN, MAX with allowUndefined and allowNull
 
     function createModelScaffoldWithMinAndMaxAllowingUndefined() {
       TestModel = Model.create({
@@ -307,5 +330,105 @@ module.exports = {
 
   'validate - format': function() {
     
+    createModelWithInvalidOptions();
+    
+    function createModelWithInvalidOptions() {
+      assert.throws( function() {
+        TestModel = Model.create({
+          fields: {
+            id: Guid.raw,
+            username: undefined
+          },
+          validation: [
+            // Lack of either "with" or "without" options is invalid
+            Model.Validate.formatOf("username", {})
+          ]
+        });
+      } );
+      
+      createAndValidateModelWithFormatWithOption();
+    }
+    
+    function createAndValidateModelWithFormatWithOption() {
+      TestModel = Model.create({
+        fields: {
+          id: Guid.raw,
+          username: undefined
+        },
+        validation: [
+          Model.Validate.formatOf("username", {
+            with: /^\w+$/
+          })
+        ]
+      });
+      
+      m = new TestModel();
+      m.validate(FAIL(validateWordShouldPass));
+    }
+    
+    function validateWordShouldPass() {
+      m.username = 'hello';
+      m.validate(PASS(validateNonWordShouldFail));
+    }
+    
+    function validateNonWordShouldFail() {
+      m.username = 'hello---';
+      m.validate(FAIL(createAndValidateModelWithFormatWithoutOption));
+    }
+    
+    function createAndValidateModelWithFormatWithoutOption() {
+      TestModel = Model.create({
+        fields: {
+          id: Guid.raw,
+          username: undefined
+        },
+        validation: [
+          Model.Validate.formatOf("username", {
+            without: /\w/
+          })
+        ]
+      });
+      
+      m = new TestModel();
+      m.validate(PASS(validateWithoutWordWithWordShouldFail));
+    }
+    
+    function validateWithoutWordWithWordShouldFail() {
+      m.username = 'hello';
+      m.validate(FAIL(validateWithoutWordWithoutWordShouldPass));
+    }
+    
+    function validateWithoutWordWithoutWordShouldPass() {
+      m.username = '---';
+      m.validate(PASS(createModelWithWithAndAllowNullOptions));
+    }
+    
+    function createModelWithWithAndAllowNullOptions() {
+      TestModel = Model.create({
+        fields: {
+          id: Guid.raw,
+          username: undefined
+        },
+        validation: [
+          Model.Validate.formatOf("username", {
+            with: /\w/,
+            allowNull: true
+          })
+        ]
+      });
+      
+      m = new TestModel();
+      validatingNullWithAllowNullOptionsShouldPass();
+    }
+    
+    function validatingNullWithAllowNullOptionsShouldPass() {
+      m.username = null;
+      m.validate(PASS(validatingUndefinedWithAllowNullOptionsShouldFail));
+    }
+        
+    function validatingUndefinedWithAllowNullOptionsShouldFail() {
+      m.username = undefined;
+      m.validate(FAIL(false));
+    }
   }
 };
