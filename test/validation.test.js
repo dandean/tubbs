@@ -399,6 +399,9 @@ module.exports = {
       });
       
       m = new TestModel();
+      
+      console.log(JSON.stringify(m, null, '  '));
+      
       validatingNullWithAllowNullOptionsShouldPass();
     }
     
