@@ -245,11 +245,7 @@ module.exports = {
     
     function validateMinAndMaxLengthAgainstValidValue() {
       m.username = 'wow';
-      m.validate(function(e, success) {
-        assert.equal(null, e);
-        assert.ok('username' in m.errors === false);
-        createModelScaffoldWithMinAndMaxAllowingUndefined();
-      });
+      m.validate(PASS(createModelScaffoldWithMinAndMaxAllowingUndefined));
     }
 
     // OPTION: MIN, MAX with allowUndefined and allowNull
@@ -274,21 +270,13 @@ module.exports = {
 
     function validateUndefinedWithAllowUndefined() {
       m = new TestModel();
-      m.validate(function(e, success) {
-        assert.equal(e, null);
-        assert.ok('username' in m.errors === false);
-        validateNullWithAllowUndefined();
-      });
+      m.validate(PASS(validateNullWithAllowUndefined));
     }
 
     function validateNullWithAllowUndefined() {
       m = new TestModel();
       m.username = null;
-      m.validate(function(e, success) {
-        assert.ok(e instanceof Error);
-        assert.ok('username' in m.errors);
-        // validateMinAndMaxLengthAgainstValueTooLong();
-      });
+      m.validate(FAIL(createModelScaffoldWithMinAndMaxAllowingNull));
     }
 
     function createModelScaffoldWithMinAndMaxAllowingNull() {
@@ -311,20 +299,13 @@ module.exports = {
 
     function validateUndefinedWithAllowNull() {
       m = new TestModel();
-      m.validate(function(e, success) {
-        assert.ok(e instanceof Error);
-        assert.ok('username' in m.errors);
-        validateNullWithAllowNull();
-      });
+      m.validate(FAIL(validateNullWithAllowNull));
     }
 
     function validateNullWithAllowNull() {
       m = new TestModel();
       m.username = null;
-      m.validate(function(e, success) {
-        assert.equal(e, null);
-        assert.ok('username' in m.errors === false);
-      });
+      m.validate(PASS());
     }
   },
 
