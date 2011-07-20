@@ -10,6 +10,13 @@ var TestModel1 = Model.create((function(){
     fields: {
       id: function() {i++; return i; },
       username: undefined,
+      age: {
+        default: 1,
+        set: function(value) {
+          value = parseInt(value, 10);
+          return (isNaN(value)) ? 30 : value ;
+        }
+      },
       first: 'John',
       last: 'Doe'
     },
@@ -31,7 +38,7 @@ module.exports = {
     assert.ok("name" in TestModel1.prototype);
     
     // Only defined properties should  reside on the prototype...
-    assert.equal(5, Object.keys(TestModel1.prototype).length);
+    assert.equal(6, Object.keys(TestModel1.prototype).length);
     
     // Check for presence of defined properties on instance...
     var model = new TestModel1(); // id == 1
@@ -79,14 +86,24 @@ module.exports = {
     assert.equal('John Doe', model.name);
   },
 
+  'propery setters': function() {
+    var model = new TestModel1();
+    assert.equal(1, model.age);
+    model.age = 10;
+    assert.equal(10, model.age);
+    model.age = new Date();
+    assert.equal(30, model.age);
+  },
+
   'json serialization': function() {
     var model = new TestModel1(); // id == 5
     var json = model.toJSON();
-    assert.equal(4, Object.keys(json).length);
+    assert.equal(5, Object.keys(json).length);
     assert.ok("id" in json);
     assert.ok("username" in json);
     assert.ok("first" in json);
     assert.ok("last" in json);
+    assert.ok("age" in json);
   },
 
   'subclassing': function() {
