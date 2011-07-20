@@ -26,7 +26,6 @@ var User = Tubbs.create({
   dataStore: new Tubbs.RiakStore({ bucket: 'users' }),
 
   fields: {
-    id: 0,
     username: undefined,
     first: '',
     last: '',
@@ -41,7 +40,7 @@ var User = Tubbs.create({
   validation: [
     Tubbs.Validate.required("username"),
     Tubbs.Validate.lengthOf("username", { min: 5 })
-  }
+  ]
 });
 ```
 
@@ -50,10 +49,27 @@ var User = Tubbs.create({
 
 ```js
 var user = new User({
-  username: "dandean",
-  first: "dan",
-  last: "dean"
+  username: "kbacon",
+  first: "Kevin",
+  last: "Bacon"
 });
+
+
+**Get one of its virtual properties**
+
+console.log(user.name);
+// -> 'Kevin Bacon'
+
+
+**Serialize the instance to pure JSON**
+
+console.log(JSON.stringify(user));
+// ->
+// {
+//   "username": "kbacon",
+//   "first": "Kevin",
+//   "last": "Bacon"
+// }
 ```
 
 
@@ -62,7 +78,7 @@ var user = new User({
 ```js
 var Employee = User.create({
   dataStore: new Tubbs.RiakStore({ bucket: 'employees' }),
-  title: "amazing employee"
+  title: "Layabout"
 });
 ```
 
@@ -72,9 +88,9 @@ var Employee = User.create({
 ```js
 var enginner = new Employee({
   username: "dandean",
-  first: "dan",
-  last: "dean",
-  title: "software engineer"
+  first: "Dan",
+  last: "Dean",
+  title: "Software Engineer"
 });
 ```
 
