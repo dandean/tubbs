@@ -1,11 +1,11 @@
 {
   "author": "Dan Dean <@dandean> (http://dandean.com)",
-  "name": "riakjs-model",
-  "description": "A model abstraction for working with Riak and RiakJS and Node.",
-  "version": "0.0.0",
+  "name": "tubbs",
+  "description": "Data Model Layer which makes working with your data much easier",
+  "version": "0.0.1",
   "repository": {
     "type": "git",
-    "url": "git://github.com/dandean/riakjs-model.git"
+    "url": "git://github.com/dandean/tubbs.git"
   },
   "main": "index",
   "scripts": {
@@ -21,5 +21,6 @@
   },
   "devDependencies": {
     "expresso": "*"
-  }
+  },
+  "keywords": ["data", "model", "mustache", "riak", "orm", "nosql", "json"]
 }
