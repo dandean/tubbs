@@ -53,16 +53,20 @@ var user = new User({
   first: "Kevin",
   last: "Bacon"
 });
+```
 
 
 **Get one of its virtual properties**
 
+```js
 console.log(user.name);
 // -> 'Kevin Bacon'
+```
 
 
 **Serialize the instance to pure JSON**
 
+```js
 console.log(JSON.stringify(user));
 // ->
 // {
