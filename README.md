@@ -102,12 +102,11 @@ var enginner = new Employee({
 Roadmap
 -------
 
-* More unit test coverage
-* Configurable primary keys (currently hardwired to 'id')
 * Validation
   * `if` and `unless` options
   * `allowBlank` option?
   * shortcut format validator strings, such as "email" and "phone"
+* More unit test coverage
 * Schema-based generated class methods: Person.findAllByAge(50, cb)
 * Documentation Pages
 * CouchStore

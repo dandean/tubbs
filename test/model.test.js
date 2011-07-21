@@ -267,5 +267,37 @@ module.exports = {
     }
   },
 
+  'user-defined primary key': function() {
+    var TestModel = Model.create({
+      dataStore: new Model.MemoryStore(),
+      primaryKey: "username",
+      fields: {
+        username: undefined,
+        name: 'John',
+      }
+    });
+    
+    var model = new TestModel({
+      username: "dandean"
+    });
+    
+    saveModel();
+    
+    function saveModel() {
+      model.save(function(e, result) {
+        findModelByCustomPrimaryKey();
+      });
+    }
+    
+    function findModelByCustomPrimaryKey() {
+      TestModel.find('dandean', function(e, result) {
+        assert.equal(null, e);
+        assert.ok(result instanceof TestModel);
+        assert.equal('dandean', result.username);
+      })
+    }
+    
+  },
+
   'generated (schema-based) database methods': function() {}
 };

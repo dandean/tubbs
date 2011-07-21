@@ -54,12 +54,13 @@ module.exports = {
 
       // Persist our data with Riak
       dataStore: new Model.RiakStore({ bucket: 'users' }),
+      
+      primaryKey: 'username',
 
       fields: {
-        id: Guid.raw,
         username: undefined,
         password: undefined,
-        first: undefined,
+        first: "Rad",
         last: undefined,
         email: undefined
       },
