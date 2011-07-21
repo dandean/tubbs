@@ -104,6 +104,7 @@ Roadmap
 
 * More unit test coverage
 * Validation
+  * Save should trigger validation
   * `if` and `unless` options
   * `allowBlank` option?
   * shortcut format validator strings, such as "email" and "phone"

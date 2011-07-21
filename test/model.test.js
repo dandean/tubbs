@@ -199,7 +199,7 @@ module.exports = {
     }
     
     function getByWhereClause() {
-      TestModel1.where(findUserOneAndTwo, assertWhereClauseResult);
+      TestModel1.where({}, findUserOneAndTwo, assertWhereClauseResult);
     }
     
     function assertWhereClauseResult(e, result) {
@@ -212,7 +212,7 @@ module.exports = {
     
     function deleteRecord(id) {
       TestModel1.delete(id, function(e, result) {
-        TestModel1.where(findUserOneAndTwo, assertUserDeleted);
+        TestModel1.where({}, findUserOneAndTwo, assertUserDeleted);
       });
     }
     

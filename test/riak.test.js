@@ -2,55 +2,87 @@ var assert = require('assert');
 var Guid = require('guid');
 var Model = require('../index');
 
-var m;
-
 // TODO: complete these unit tests
 
 module.exports = {
   'riak': function() {
-    var TestModel, m, id;
-    
-    createModelScaffold();
+    // var TestModel, m, id;
+    // 
+    // createModelScaffold();
+    // 
+    // function createModelScaffold() {
+    //   TestModel = Model.create({
+    //     dataStore: new Model.RiakStore({ bucket: 'unit-tests' }),
+    //     fields: {
+    //       id: Guid.raw,
+    //       username: undefined
+    //     }
+    //   });
+    //   
+    //   createAndSaveNewDocument();
+    // }
+    // 
+    // function createAndSaveNewDocument() {
+    //   m = new TestModel({
+    //     username: "test 1"
+    //   });
+    //   
+    //   m.save(function(e, result) {
+    //     id = result.id;
+    //     assert.ok(Guid.isGuid(id));
+    //     getAllDocuments();
+    //   });
+    // }
+    // 
+    // function getAllDocuments() {
+    //   TestModel.all(function(e, documents) {
+    //     // documents.forEach(function(d) {
+    //     //   d.delete(function() {});
+    //     // });
+    //     assert.equal(1, documents.length);
+    //     assert.ok(documents[0] instanceof TestModel);
+    //     assert.equal(documents[0].username, 'test 1');
+    //     
+    //     m.delete(function(e, result) {
+    //       console.log(e, result);
+    //     });
+    //     
+    //   });
+    // }
 
-    function createModelScaffold() {
-      TestModel = Model.create({
-        dataStore: new Model.RiakStore({ bucket: 'unit-tests' }),
-        fields: {
-          id: Guid.raw,
-          username: undefined
+    var User = Model.create({
+
+      // Persist our data with Riak
+      dataStore: new Model.RiakStore({ bucket: 'users' }),
+
+      fields: {
+        id: Guid.raw,
+        username: undefined,
+        password: undefined,
+        first: undefined,
+        last: undefined,
+        email: undefined
+      },
+
+      virtual: {
+        name: function() {
+          return ((this.first || '') + ' ' + (this.last || '')).trim();
         }
-      });
-      
-      createAndSaveNewDocument();
-    }
+      }
+    });
 
-    function createAndSaveNewDocument() {
-      m = new TestModel({
-        username: "test 1"
-      });
-      
-      m.save(function(e, result) {
-        id = result.id;
-        assert.ok(Guid.isGuid(id));
-        getAllDocuments();
-      });
-    }
-    
-    function getAllDocuments() {
-      TestModel.all(function(e, documents) {
-        // documents.forEach(function(d) {
-        //   d.delete(function() {});
-        // });
-        assert.equal(1, documents.length);
-        assert.ok(documents[0] instanceof TestModel);
-        assert.equal(documents[0].username, 'test 1');
-        
-        m.delete(function(e, result) {
-          console.log(e, result);
-        });
-        
-      });
-    }
+    User.where(
+      {
+        username: "dandean3",
+        email: "me@dandean.com"
+      },
+      function(doc, args) {
+        return doc.username == args.username && doc.email == args.email;
+      },
+      function(e, result) {
+        console.log(e, result);
+      }
+    );
 
       
       
