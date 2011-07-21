@@ -109,6 +109,9 @@ Roadmap
 * More unit test coverage
 * Schema-based generated class methods: Person.findAllByAge(50, cb)
 * Documentation Pages
+  * Model instance API
+  * Model class API
+  * Validators
 * CouchStore
 * MongoStore
 * RedisStore
