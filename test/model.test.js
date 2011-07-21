@@ -207,6 +207,23 @@ module.exports = {
       assert.ok(result[1] instanceof Model && result[1] instanceof TestModel1);
       assert.equal(result.length, 2);
       
+      getByWhereClauseWithArgs();
+    }
+    
+    function getByWhereClauseWithArgs() {
+      TestModel1.where(
+        {
+          username: "userone"
+        },
+        function(doc, args) {
+          return doc.username && doc.username == args.username
+        }, assertWhereClauseWithArgsResult);
+    }
+    
+    function assertWhereClauseWithArgsResult(e, result) {
+      assert.ok(result[0] instanceof Model && result[0] instanceof TestModel1);
+      assert.equal(result.length, 1);
+      
       deleteRecord(result[0].id);
     }
     
