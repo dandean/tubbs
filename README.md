@@ -103,8 +103,8 @@ Roadmap
 -------
 
 * More unit test coverage
+* Configurable primary keys (currently hardwired to 'id')
 * Validation
-  * Save should trigger validation
   * `if` and `unless` options
   * `allowBlank` option?
   * shortcut format validator strings, such as "email" and "phone"
