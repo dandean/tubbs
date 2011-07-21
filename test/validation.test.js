@@ -412,5 +412,50 @@ module.exports = {
       m.username = undefined;
       m.validate(FAIL(false));
     }
+  },
+  
+  'validate - if option': function() {
+    createAndValidateModelWithIFOption();
+    
+    function createAndValidateModelWithIFOption() {
+      TestModel = Model.create({
+        fields: {
+          username: undefined
+        },
+        validation: [
+          Model.Validate.formatOf("username", {
+            with: /^\w+$/,
+            if : function(instance, value) {
+              // Only validate the username if it exists and does not contain "zwick"
+              return value && value.indexOf('zwick') == -1;
+            }
+          })
+        ]
+      });
+      
+      m = new TestModel({ username: 'zwick hi there !!!' });
+      m.validate(PASS(createAndValidateModelWithUNLESSOption));
+    }
+    
+    function createAndValidateModelWithUNLESSOption() {
+      TestModel = Model.create({
+        fields: {
+          username: undefined
+        },
+        validation: [
+          Model.Validate.formatOf("username", {
+            with: /^\w+$/,
+            unless : function(instance, value) {
+              // Run the validator unless the value contains "zwick"
+              return value && value.indexOf('zwick') > -1;
+            }
+          })
+        ]
+      });
+      
+      m = new TestModel({ username: 'zwick hi there !!!' });
+      m.validate(PASS());
+    }
+    
   }
 };

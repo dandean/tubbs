@@ -103,7 +103,6 @@ Roadmap
 -------
 
 * Validation
-  * `if` and `unless` options
   * `allowBlank` option?
   * shortcut format validator strings, such as "email" and "phone"
 * More unit test coverage
