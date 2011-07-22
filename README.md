@@ -105,6 +105,8 @@ Roadmap
 * Validation
   * `allowBlank` option?
   * shortcut format validator strings, such as "email" and "phone"
+* Add a `beforeSave` option: beforeSave: function() { this.dateModified = new Date(); }
+* Figure out how to notify others when an error is thrown.
 * More unit test coverage
 * Schema-based generated class methods: Person.findAllByAge(50, cb)
 * Documentation Pages
