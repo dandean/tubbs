@@ -43,6 +43,7 @@ module.exports = {
     // Check for presence of defined properties on instance...
     var model = new TestModel1(); // id == 1
     
+    assert.equal(TestModel1, model.constructor);
     assert.equal(1, model.id);
     assert.ok("id" in model);
     assert.ok("username" in model);
@@ -116,6 +117,7 @@ module.exports = {
     
     // Ensure that all parent properties AND the new property are in the model.
     var model = new TestModel2(); // id == 6
+    assert.equal(TestModel2, model.constructor);
     assert.ok("id" in model);
     assert.ok("username" in model);
     assert.ok("first" in model);
@@ -142,6 +144,7 @@ module.exports = {
       power: 'punch hard',
       weakness: 'pizza'
     });
+    assert.equal(TestModel3, model.constructor);
     
 
     // Check local values of new properties
