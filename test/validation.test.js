@@ -32,7 +32,7 @@ module.exports = {
     var TestModel, m;
     
     createModelScaffold();
-
+  
     function createModelScaffold() {
       TestModel = Model.create({
         fields: {
@@ -89,7 +89,7 @@ module.exports = {
     var TestModel;
     
     createModelScaffoldWithInvalidOptions();
-
+  
     function createModelScaffoldWithInvalidOptions() {
       assert.throws( function() {
         TestModel = Model.create({
@@ -154,7 +154,7 @@ module.exports = {
     }
     
     // OPTION: MAX
-
+  
     function createModelScaffoldWithMaxValue() {
       TestModel = Model.create({
         fields: {
@@ -168,7 +168,7 @@ module.exports = {
       
       validateMaxLengthAgainstNoValue();
     }
-
+  
     function validateMaxLengthAgainstNoValue() {
       m = new TestModel();
       m.validate(function(e, success) {
@@ -196,9 +196,9 @@ module.exports = {
         createModelScaffoldWithMinAndMax();
       });
     }
-
+  
     // OPTION: MIN, MAX
-
+  
     function createModelScaffoldWithMinAndMax() {
       TestModel = Model.create({
         fields: {
@@ -212,7 +212,7 @@ module.exports = {
       
       validateMinAndMaxLengthAgainstNoValue();
     }
-
+  
     function validateMinAndMaxLengthAgainstNoValue() {
       m = new TestModel();
       m.validate(function(e, success) {
@@ -247,9 +247,9 @@ module.exports = {
       m.username = 'wow';
       m.validate(PASS(createModelScaffoldWithMinAndMaxAllowingUndefined));
     }
-
+  
     // OPTION: MIN, MAX with allowUndefined and allowNull
-
+  
     function createModelScaffoldWithMinAndMaxAllowingUndefined() {
       TestModel = Model.create({
         fields: {
@@ -267,18 +267,18 @@ module.exports = {
       
       validateUndefinedWithAllowUndefined();
     }
-
+  
     function validateUndefinedWithAllowUndefined() {
       m = new TestModel();
       m.validate(PASS(validateNullWithAllowUndefined));
     }
-
+  
     function validateNullWithAllowUndefined() {
       m = new TestModel();
       m.username = null;
       m.validate(FAIL(createModelScaffoldWithMinAndMaxAllowingNull));
     }
-
+  
     function createModelScaffoldWithMinAndMaxAllowingNull() {
       TestModel = Model.create({
         fields: {
@@ -296,19 +296,19 @@ module.exports = {
       
       validateUndefinedWithAllowNull();
     }
-
+  
     function validateUndefinedWithAllowNull() {
       m = new TestModel();
       m.validate(FAIL(validateNullWithAllowNull));
     }
-
+  
     function validateNullWithAllowNull() {
       m = new TestModel();
       m.username = null;
       m.validate(PASS());
     }
   },
-
+  
   'validate - format': function() {
     
     createModelWithInvalidOptions();

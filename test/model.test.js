@@ -53,51 +53,55 @@ module.exports = {
   },
 
   'default property values': function() {
-    var model = new TestModel1(); // id == 2
+    var model1,
+        model2;
+
+    model1 = new TestModel1(); // id == 2
     
     // Check all default values...
-    assert.equal(2, model.id);
-    assert.equal(undefined, model.username);
-    assert.equal('John', model.first);
-    assert.equal('Doe', model.last);
-    assert.equal('John Doe', model.name);
+    assert.equal(2, model1.id);
+    assert.equal(undefined, model1.username);
+    assert.equal('John', model1.first);
+    assert.equal('Doe', model1.last);
+    assert.equal('John Doe', model1.name);
     
     // Set new value...
-    model.first = 'Rad';
-    assert.equal('Rad', model.first);
-    assert.equal('Rad Doe', model.name);
+    model1.first = 'Rad';
+    assert.equal('Rad', model1.first);
+    assert.equal('Rad Doe', model1.name);
     
     // Unset value, ensure defaults...
-    model.first = undefined;
-    assert.equal('John', model.first);
-    assert.equal('John Doe', model.name);
+    model1.first = undefined;
+    assert.equal('John', model1.first);
+    assert.equal('John Doe', model1.name);
     
     // Check function-type defaults for re-execution...
-    model.id = undefined; // id == 3
-    assert.equal(3, model.id, 'Function-default should have executed, incrementing the ID.');
-
+    model1.id = undefined; // id == 3
+    assert.equal(3, model1.id, 'Function-default should have executed, incrementing the ID.');
+  
     // Instantiate with a non-default value...
-    model = new TestModel1({ first: 'Rad' }); // id == 4
-    assert.equal('Rad', model.first);
-    assert.equal('Rad Doe', model.name);
-
+    model2 = new TestModel1({ first: 'Rad' }); // id == 4
+    assert.equal('Rad', model2.first);
+    assert.equal('Rad Doe', model2.name);
+    assert.equal(4, model2.id, 'Function-default should have executed, incrementing the ID.');
+  
     // Unset value, ensure defaults...
-    model.first = undefined;
-    assert.equal('John', model.first);
-    assert.equal('John Doe', model.name);
+    model2.first = undefined;
+    assert.equal('John', model2.first);
+    assert.equal('John Doe', model2.name);
   },
-
+  
   'propery setters': function() {
-    var model = new TestModel1();
+    var model = new TestModel1(); // id == 5
     assert.equal(1, model.age);
     model.age = 10;
     assert.equal(10, model.age);
     model.age = new Date();
     assert.equal(30, model.age);
   },
-
+  
   'json serialization': function() {
-    var model = new TestModel1(); // id == 5
+    var model = new TestModel1(); // id == 6
     var json = model.toJSON();
     assert.equal(5, Object.keys(json).length);
     assert.ok("id" in json);
@@ -106,7 +110,7 @@ module.exports = {
     assert.ok("last" in json);
     assert.ok("age" in json);
   },
-
+  
   'subclassing': function() {
     // Subclass, adding a new property
     var TestModel2 = TestModel1.create({
@@ -116,7 +120,7 @@ module.exports = {
     });
     
     // Ensure that all parent properties AND the new property are in the model.
-    var model = new TestModel2(); // id == 6
+    var model = new TestModel2(); // id == 7
     assert.equal(TestModel2, model.constructor);
     assert.ok("id" in model);
     assert.ok("username" in model);
@@ -131,7 +135,7 @@ module.exports = {
     // Override default value.
     model.power = 'i cannot fly';
     assert.equal('i cannot fly', model.power);
-
+  
     // Subclass the subclass, adding a new property
     var TestModel3 = TestModel2.create({
       fields: {
@@ -140,13 +144,12 @@ module.exports = {
     });
     
     // Set values for new properties...
-    model = new TestModel3({ // id == 7
+    model = new TestModel3({ // id == 8
       power: 'punch hard',
       weakness: 'pizza'
     });
     assert.equal(TestModel3, model.constructor);
     
-
     // Check local values of new properties
     assert.equal('punch hard', model.power);
     assert.equal('pizza', model.weakness);
@@ -154,7 +157,7 @@ module.exports = {
     // Unset local values...
     model.power = undefined;
     model.weakness = undefined;
-
+  
     // Check that defaults return...
     assert.equal('i can fly', model.power, "Power was deleted so should be the default but is ", model.power);
     assert.equal('i cannot swim', model.weakness);
@@ -165,7 +168,7 @@ module.exports = {
     assert.ok(model instanceof TestModel1);
     assert.ok(model instanceof Model);
   },
-
+  
   'class-level database methods': function() {
     TestModel1.save(new TestModel1({
       username: "userone",
@@ -219,7 +222,7 @@ module.exports = {
           username: "userone"
         },
         function(doc, args) {
-          return doc.username && doc.username == args.username
+          return doc.username && doc.username == args.username;
         }, assertWhereClauseWithArgsResult);
     }
     
@@ -241,7 +244,7 @@ module.exports = {
       assert.equal(result.length, 1);
     }
   },
-
+  
   'instance-level database methods': function() {
     new TestModel1({
       username: "userthree",
@@ -255,21 +258,21 @@ module.exports = {
       TestModel1.find(id, function(e, record) {
         assert.ok(record instanceof Model && record instanceof TestModel1);
         assert.equal("userthree", record.username);
-
+  
         record.delete(function(e, result) {
           TestModel1.find(id, assertUserDeleted);
         });
-
+  
       });
     }
-
+  
     function assertUserDeleted(e, result) {
       assert.ok(e instanceof Error);
       assert.equal(e.message, 'Document not found.');
       assert.equal(null, result);
     }
   },
-
+  
   'user-defined primary key': function() {
     var TestModel = Model.create({
       dataStore: new Model.MemoryStore(),
@@ -297,10 +300,10 @@ module.exports = {
         assert.equal(null, e);
         assert.ok(result instanceof TestModel);
         assert.equal('dandean', result.username);
-      })
+      });
     }
     
   },
-
+  
   'generated (schema-based) database methods': function() {}
 };
