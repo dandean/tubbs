@@ -2,7 +2,7 @@
   "author": "Dan Dean <@dandean> (http://dandean.com)",
   "name": "tubbs",
   "description": "Data Model Layer which makes working with your data much easier",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "repository": {
     "type": "git",
     "url": "git://github.com/dandean/tubbs.git"
