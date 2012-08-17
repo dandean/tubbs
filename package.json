@@ -20,7 +20,8 @@
     "riak-js": "*"
   },
   "devDependencies": {
-    "expresso": "*"
+    "expresso": "*",
+    "mocha": "*"
   },
   "keywords": ["data", "model", "mustache", "riak", "orm", "nosql", "json"]
 }
