@@ -2,34 +2,39 @@ var assert = require('assert');
 var Guid = require('guid');
 var Model = require('../index');
 
-var id = 0;
-var TestModel1 = Model.create((function(){
-  var i = 0;
-  return {
-    dataStore: new Model.MemoryStore(),
-    fields: {
-      id: function() {i++; return i; },
-      username: undefined,
-      age: {
-        default: 1,
-        set: function(value) {
-          value = parseInt(value, 10);
-          return (isNaN(value)) ? 30 : value ;
-        }
-      },
-      first: 'John',
-      last: 'Doe'
-    },
-    virtual: {
-      name: function() {
-        return ((this.first || '') + ' ' + (this.last || '')).trim();
-      }
-    }
-  };
-})());
+describe('Model', function() {
 
-module.exports = {
-  'model definition': function() {
+  var id = 0;
+  var TestModel1;
+
+  before(function() {
+    TestModel1 = Model.create((function(){
+      var i = 0;
+      return {
+        dataStore: new Model.MemoryStore(),
+        fields: {
+          id: function() {i++; return i; },
+          username: undefined,
+          age: {
+            default: 1,
+            set: function(value) {
+              value = parseInt(value, 10);
+              return (isNaN(value)) ? 30 : value ;
+            }
+          },
+          first: 'John',
+          last: 'Doe'
+        },
+        virtual: {
+          name: function() {
+            return ((this.first || '') + ' ' + (this.last || '')).trim();
+          }
+        }
+      };
+    })());
+  });
+
+  it('should be defined correctly', function() {
     // Check for the presence of all defined model properties (virtual and real)
     assert.ok("id" in TestModel1.prototype);
     assert.ok("username" in TestModel1.prototype);
@@ -50,9 +55,9 @@ module.exports = {
     assert.ok("first" in model);
     assert.ok("last" in model);
     assert.ok("name" in model);
-  },
+  });
 
-  'default property values': function() {
+  it('should provide default property values', function() {
     var model1,
         model2;
 
@@ -78,29 +83,29 @@ module.exports = {
     // Check function-type defaults for re-execution...
     model1.id = undefined; // id == 3
     assert.equal(3, model1.id, 'Function-default should have executed, incrementing the ID.');
-  
+
     // Instantiate with a non-default value...
     model2 = new TestModel1({ first: 'Rad' }); // id == 4
     assert.equal('Rad', model2.first);
     assert.equal('Rad Doe', model2.name);
     assert.equal(4, model2.id, 'Function-default should have executed, incrementing the ID.');
-  
+
     // Unset value, ensure defaults...
     model2.first = undefined;
     assert.equal('John', model2.first);
     assert.equal('John Doe', model2.name);
-  },
-  
-  'propery setters': function() {
+  });
+
+  it('should create models with property setters', function() {
     var model = new TestModel1(); // id == 5
     assert.equal(1, model.age);
     model.age = 10;
     assert.equal(10, model.age);
     model.age = new Date();
     assert.equal(30, model.age);
-  },
-  
-  'json serialization': function() {
+  });
+
+  it('should serialize models to JSON', function() {
     var model = new TestModel1(); // id == 6
     var json = model.toJSON();
     assert.equal(5, Object.keys(json).length);
@@ -109,9 +114,9 @@ module.exports = {
     assert.ok("first" in json);
     assert.ok("last" in json);
     assert.ok("age" in json);
-  },
-  
-  'subclassing': function() {
+  });
+
+  it('should be subclass-able', function() {
     // Subclass, adding a new property
     var TestModel2 = TestModel1.create({
       fields: {
@@ -135,7 +140,7 @@ module.exports = {
     // Override default value.
     model.power = 'i cannot fly';
     assert.equal('i cannot fly', model.power);
-  
+    
     // Subclass the subclass, adding a new property
     var TestModel3 = TestModel2.create({
       fields: {
@@ -157,7 +162,7 @@ module.exports = {
     // Unset local values...
     model.power = undefined;
     model.weakness = undefined;
-  
+    
     // Check that defaults return...
     assert.equal('i can fly', model.power, "Power was deleted so should be the default but is ", model.power);
     assert.equal('i cannot swim', model.weakness);
@@ -167,9 +172,9 @@ module.exports = {
     assert.ok(model instanceof TestModel2);
     assert.ok(model instanceof TestModel1);
     assert.ok(model instanceof Model);
-  },
-  
-  'class-level database methods': function() {
+  });
+
+  it('should work with class-level database methods', function() {
     TestModel1.save(new TestModel1({
       username: "userone",
       first: "User",
@@ -243,9 +248,9 @@ module.exports = {
       assert.ok(result[0] instanceof Model && result[0] instanceof TestModel1);
       assert.equal(result.length, 1);
     }
-  },
-  
-  'instance-level database methods': function() {
+  });
+
+  it('should work with instance-level database methods', function() {
     new TestModel1({
       username: "userthree",
       first: "User",
@@ -258,22 +263,22 @@ module.exports = {
       TestModel1.find(id, function(e, record) {
         assert.ok(record instanceof Model && record instanceof TestModel1);
         assert.equal("userthree", record.username);
-  
+    
         record.delete(function(e, result) {
           TestModel1.find(id, assertUserDeleted);
         });
-  
+    
       });
     }
-  
+    
     function assertUserDeleted(e, result) {
       assert.ok(e instanceof Error);
       assert.equal(e.message, 'Document not found.');
       assert.equal(null, result);
     }
-  },
-  
-  'user-defined primary key': function() {
+  });
+
+  it('should allow user-defined primary key property', function() {
     var TestModel = Model.create({
       dataStore: new Model.MemoryStore(),
       primaryKey: "username",
@@ -302,8 +307,6 @@ module.exports = {
         assert.equal('dandean', result.username);
       });
     }
-    
-  },
-  
-  'generated (schema-based) database methods': function() {}
-};
+  });
+
+});
