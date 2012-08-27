@@ -1,19 +1,16 @@
 {
   "author": "Dan Dean <@dandean> (http://dandean.com)",
   "name": "tubbs",
-  "description": "Data Model Layer which makes working with your data much easier",
-  "version": "0.0.4",
+  "description": "Models with an API that I actually like.",
+  "version": "0.0.5",
   "repository": {
     "type": "git",
     "url": "git://github.com/dandean/tubbs.git"
   },
   "main": "index",
   "scripts": {
-    "test": "expresso",
+    "test": "make test",
     "prepublish" : "npm prune"
-  },
-  "engines": {
-    "node": ">= 0.4.0"
   },
   "dependencies": {
     "guid": "*"
