@@ -22,8 +22,8 @@ Examples
 ```js
 var User = Tubbs.create({
 
-  // Persist our data with Riak
-  dataStore: new Tubbs.RiakStore({ bucket: 'users' }),
+  // Persist our data with an in-memory store:
+  dataStore: new Tubbs.MemoryStore(),
 
   fields: {
     username: undefined,
@@ -81,7 +81,7 @@ console.log(JSON.stringify(user));
 
 ```js
 var Employee = User.create({
-  dataStore: new Tubbs.RiakStore({ bucket: 'employees' }),
+  dataStore: new Tubbs.MemoryStore(),
   title: "Layabout"
 });
 ```
