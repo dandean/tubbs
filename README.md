@@ -14,8 +14,8 @@ Features
 * ActiveModel-style validation
 * Abstract data store interface. So far:
   * In-memory (built-in: `Tubbs.MemoryStore`)
-  * Riak (via tubbs-riakstore - server-side only at the moment)
-  * REST (via rubbs-reststore - browser-only, at the moment)
+  * Riak (via tubbs-riakstorage - server-side only at the moment)
+  * REST (via rubbs-reststorage - browser-only, at the moment)
 
 
 Examples
