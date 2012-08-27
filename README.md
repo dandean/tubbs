@@ -12,8 +12,10 @@ Features
 * Configurable default property values
 * Virtual (non-serialized) properties
 * ActiveModel-style validation
-* Built-in data store for in-memory and Riak persistence
-* Abstract data store interface (implement your own persistence layer!)
+* Abstract data store interface. So far:
+  * In-memory (built-in: `Tubbs.MemoryStore`)
+  * Riak (via tubbs-riakstore - server-side only at the moment)
+  * REST (via rubbs-reststore - browser-only, at the moment)
 
 
 Examples
@@ -99,8 +101,8 @@ var enginner = new Employee({
 ```
 
 
-Roadmap
--------
+Roadmap (Also, see TODO.md)
+---------------------------
 
 * Validation
   * `allowBlank` option?
@@ -116,3 +118,4 @@ Roadmap
 * CouchStore
 * MongoStore
 * RedisStore
+* LocalStorageStore
