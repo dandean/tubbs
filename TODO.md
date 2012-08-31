@@ -6,12 +6,12 @@ TODO
 
   √ model.on('change', function(name, value, old) {});
   √ model.on('change:name', function(value, old) {});
-  model.on('delete', function(model) {});
+  √ model.on('delete', function(model) {});
 
 * Fire Model-type level data-driven events:
 
   Model.on('create', function(model) {});
-  Model.on('delete', function(model) {});
+  √ Model.on('delete', function(model) {});
   √ Model.on('change', function(model, property, value, old) {});
   √ Model.on('change:name', function(model, value, old) {});
 

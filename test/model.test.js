@@ -105,78 +105,129 @@ describe('Model', function() {
     assert.equal(30, model.age);
   });
 
-  it('should emit events when properties change', function(done) {
-    var model = new TestModel1();
+  describe('instance-level events', function() {
+    it('should emit when a property changes', function(done) {
+      var model = new TestModel1();
 
-    model.on('change', function(property, old, value) {
-      assert.equal('username', property);
-      assert.equal(undefined, old);
-      assert.equal('radical', value);
-      done();
+      model.on('change', function(property, old, value) {
+        assert.equal('username', property);
+        assert.equal(undefined, old);
+        assert.equal('radical', value);
+        done();
+      });
+
+      model.username = 'radical';
     });
 
-    model.username = 'radical';
+    it('should emit when a specific property change', function(done) {
+      var model = new TestModel1();
+
+      model.on('change:username', function(old, value) {
+        assert.equal(undefined, old);
+        assert.equal('radical', value);
+        done();
+      });
+
+      model.username = 'radical';
+    });
+
+    it('should emit when a model is deleted', function(done) {
+      var TestModel = Model.create((function(){
+        var i = 0;
+        return {
+          dataStore: new Model.MemoryStore(),
+          fields: {
+            id: function() { i++; return i; },
+            username: undefined
+          }
+        };
+      })());
+
+      var model = new TestModel();
+
+      model.on('delete', function(instance) {
+        assert.equal(model, instance);
+        done();
+      });
+
+      model.save(function() {
+        model.delete(function() {})
+      });
+    });
   });
 
-  it('should emit class-level events when properties change', function(done) {
-    var TestModel = Model.create((function(){
-      var i = 0;
-      return {
-        dataStore: new Model.MemoryStore(),
-        fields: {
-          id: function() { i++; return i; },
-          username: undefined
-        }
-      };
-    })());
+  describe('class-level events', function() {
+    it('should emit when properties change', function(done) {
+      var TestModel = Model.create((function(){
+        var i = 0;
+        return {
+          dataStore: new Model.MemoryStore(),
+          fields: {
+            id: function() { i++; return i; },
+            username: undefined
+          }
+        };
+      })());
 
-    var model = new TestModel();
+      var model = new TestModel();
 
-    TestModel.on('change', function(instance, property, old, value) {
-      assert.equal(model, instance);
-      assert.equal('username', property);
-      assert.equal(undefined, old);
-      assert.equal('radical', value);
-      done();
+      TestModel.on('change', function(instance, property, old, value) {
+        assert.equal(model, instance);
+        assert.equal('username', property);
+        assert.equal(undefined, old);
+        assert.equal('radical', value);
+        done();
+      });
+
+      model.username = 'radical';
     });
 
-    model.username = 'radical';
-  });
+    it('should emit when a specific property change', function(done) {
+      var TestModel = Model.create((function(){
+        var i = 0;
+        return {
+          dataStore: new Model.MemoryStore(),
+          fields: {
+            id: function() { i++; return i; },
+            username: undefined
+          }
+        };
+      })());
 
-  it('should emit events when a specific property change', function(done) {
-    var model = new TestModel1();
+      var model = new TestModel();
 
-    model.on('change:username', function(old, value) {
-      assert.equal(undefined, old);
-      assert.equal('radical', value);
-      done();
+      TestModel.on('change:username', function(instance, old, value) {
+        assert.equal(model, instance);
+        assert.equal(undefined, old);
+        assert.equal('radical', value);
+        done();
+      });
+
+      model.username = 'radical';
     });
 
-    model.username = 'radical';
-  });
+    it('should emit when a model is deleted', function(done) {
+      var TestModel = Model.create((function(){
+        var i = 0;
+        return {
+          dataStore: new Model.MemoryStore(),
+          fields: {
+            id: function() { i++; return i; },
+            username: undefined
+          }
+        };
+      })());
 
-  it('should emit class-level events when a specific property change', function(done) {
-    var TestModel = Model.create((function(){
-      var i = 0;
-      return {
-        dataStore: new Model.MemoryStore(),
-        fields: {
-          id: function() { i++; return i; },
-          username: undefined
-        }
-      };
-    })());
+      TestModel.on('delete', function(instance) {
+        assert.equal(model, instance);
+        done();
+      });
 
-    var model = new TestModel();
-
-    TestModel.on('change:username', function(instance, old, value) {
-      assert.equal(model, instance);
-      assert.equal(undefined, old);
-      assert.equal('radical', value);
-      done();
+      var model = new TestModel();
+      model.save(function() {
+        model.delete(function() {})
+      });
     });
-
-    model.username = 'radical';
   });
 
   it('should serialize models to JSON', function() {
