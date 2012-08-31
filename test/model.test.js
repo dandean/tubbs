@@ -272,6 +272,26 @@ describe('Model', function() {
       model.save(function() {});
     });
 
+    it('should emit when a model is created', function(done) {
+      var TestModel = Model.create((function(){
+        var i = 0;
+        return {
+          dataStore: new Model.MemoryStore(),
+          fields: {
+            id: function() { i++; return i; },
+            username: undefined
+          }
+        };
+      })());
+
+      TestModel.on('new', function(instance) {
+        assert.ok(instance instanceof TestModel);
+        done();
+      });
+
+      var model = new TestModel();
+    });
+
   });
 
   it('should serialize models to JSON', function() {
