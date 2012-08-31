@@ -105,6 +105,31 @@ describe('Model', function() {
     assert.equal(30, model.age);
   });
 
+  it('should emit events when properties change', function(done) {
+    var model = new TestModel1();
+
+    model.on('change', function(property, old, value) {
+      assert.equal('username', property);
+      assert.equal(undefined, old);
+      assert.equal('radical', value);
+      done();
+    });
+
+    model.username = 'radical';
+  });
+
+  it('should emit events when a specific property change', function(done) {
+    var model = new TestModel1();
+
+    model.on('change:username', function(old, value) {
+      assert.equal(undefined, old);
+      assert.equal('radical', value);
+      done();
+    });
+
+    model.username = 'radical';
+  });
+
   it('should serialize models to JSON', function() {
     var model = new TestModel1(); // id == 6
     var json = model.toJSON();
