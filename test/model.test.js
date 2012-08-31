@@ -131,6 +131,28 @@ describe('Model', function() {
       model.username = 'radical';
     });
 
+    it('should emit when a model is saved', function(done) {
+      var TestModel = Model.create((function(){
+        var i = 0;
+        return {
+          dataStore: new Model.MemoryStore(),
+          fields: {
+            id: function() { i++; return i; },
+            username: undefined
+          }
+        };
+      })());
+
+      var model = new TestModel();
+
+      model.on('save', function(instance) {
+        assert.equal(model, instance);
+        done();
+      });
+
+      model.save(function() {});
+    });
+
     it('should emit when a model is deleted', function(done) {
       var TestModel = Model.create((function(){
         var i = 0;
@@ -228,6 +250,28 @@ describe('Model', function() {
         model.delete(function() {})
       });
     });
+
+    it('should emit when a model is saved', function(done) {
+      var TestModel = Model.create((function(){
+        var i = 0;
+        return {
+          dataStore: new Model.MemoryStore(),
+          fields: {
+            id: function() { i++; return i; },
+            username: undefined
+          }
+        };
+      })());
+
+      TestModel.on('save', function(instance) {
+        assert.equal(model, instance);
+        done();
+      });
+
+      var model = new TestModel();
+      model.save(function() {});
+    });
+
   });
 
   it('should serialize models to JSON', function() {
