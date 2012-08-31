@@ -13,7 +13,8 @@
     "prepublish" : "npm prune"
   },
   "dependencies": {
-    "guid": "*"
+    "guid": "*",
+    "eventemitter2": "*"
   },
   "devDependencies": {
     "mocha": "*"
