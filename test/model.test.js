@@ -118,10 +118,59 @@ describe('Model', function() {
     model.username = 'radical';
   });
 
+  it('should emit class-level events when properties change', function(done) {
+    var TestModel = Model.create((function(){
+      var i = 0;
+      return {
+        dataStore: new Model.MemoryStore(),
+        fields: {
+          id: function() { i++; return i; },
+          username: undefined
+        }
+      };
+    })());
+
+    var model = new TestModel();
+
+    TestModel.on('change', function(instance, property, old, value) {
+      assert.equal(model, instance);
+      assert.equal('username', property);
+      assert.equal(undefined, old);
+      assert.equal('radical', value);
+      done();
+    });
+
+    model.username = 'radical';
+  });
+
   it('should emit events when a specific property change', function(done) {
     var model = new TestModel1();
 
     model.on('change:username', function(old, value) {
+      assert.equal(undefined, old);
+      assert.equal('radical', value);
+      done();
+    });
+
+    model.username = 'radical';
+  });
+
+  it('should emit class-level events when a specific property change', function(done) {
+    var TestModel = Model.create((function(){
+      var i = 0;
+      return {
+        dataStore: new Model.MemoryStore(),
+        fields: {
+          id: function() { i++; return i; },
+          username: undefined
+        }
+      };
+    })());
+
+    var model = new TestModel();
+
+    TestModel.on('change:username', function(instance, old, value) {
+      assert.equal(model, instance);
       assert.equal(undefined, old);
       assert.equal('radical', value);
       done();

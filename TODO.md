@@ -12,8 +12,8 @@ TODO
 
   Model.on('create', function(model) {});
   Model.on('delete', function(model) {});
-  Model.on('change', function(model, property, value, old) {});
-  Model.on('change:name', function(model, value, old) {});
+  √ Model.on('change', function(model, property, value, old) {});
+  √ Model.on('change:name', function(model, value, old) {});
 
 * Figure out methodology for setting data w/o firing events.
 
