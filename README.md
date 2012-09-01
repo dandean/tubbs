@@ -11,6 +11,8 @@ Features
 * Configurable default property values
 * Virtual (non-serialized) properties
 * ActiveModel-style validation
+* Observe property value changes
+* Observe creation and deletion and save
 * Abstract data store interface. So far:
   * In-memory (built-in: `Tubbs.MemoryStore`)
   * Riak (via tubbs-riakstorage - server-side only at the moment)
@@ -63,6 +65,53 @@ var user = new User({
 console.log(user.name);
 // -> 'Kevin Bacon'
 ```
+
+
+**Observe property value changes**
+
+```js
+User.on('change', function(instance, property, old, value) {
+  // When any property changes on any User instance
+});
+
+User.on('change:name', function(instance, old, value) {
+  // When the "name" property changes on any User instance
+});
+
+var user = new User();
+
+user.on('change', function(property, old, value) {
+  // When any property changes on a specific User instance
+});
+
+user.on('change:name', function(old, value) {
+  // When the "name" property changes on a specific User instance
+});
+
+
+**Observe model creation and deletion and save**
+
+User.on('new', function(instance) {
+  // When any User model is created.
+});
+
+User.on('save', function(instance) {
+  // When any User model is saved.
+});
+
+User.on('delete', function(instance) {
+  // When any User model is deleted.
+});
+
+var user = new User();
+
+user.on('save', function(instance) {
+  // When a specific User model is saved.
+});
+
+user.on('delete', function(instance) {
+  // When a specific User model is deleted.
+});
 
 
 **Serialize the instance to pure JSON**
