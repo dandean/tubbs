@@ -8,7 +8,6 @@ Tubbs
 Features
 --------
 
-* Structural inheritance
 * Configurable default property values
 * Virtual (non-serialized) properties
 * ActiveModel-style validation
@@ -25,7 +24,7 @@ Examples
 var User = Tubbs.define({
 
   // Persist our data with an in-memory store:
-  dataStore: new Tubbs.MemoryStore(),
+  dataStore: { type: Tubbs.MemoryStore },
 
   fields: {
     username: undefined,
@@ -76,28 +75,6 @@ console.log(JSON.stringify(user));
 //   "first": "Kevin",
 //   "last": "Bacon"
 // }
-```
-
-
-**Extend the User model as the Employee model**
-
-```js
-var Employee = User.define({
-  dataStore: new Tubbs.MemoryStore(),
-  title: "Layabout"
-});
-```
-
-
-**Create a new Employee**
-
-```js
-var enginner = new Employee({
-  username: "dandean",
-  first: "Dan",
-  last: "Dean",
-  title: "Software Engineer"
-});
 ```
 
 

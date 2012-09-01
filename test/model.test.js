@@ -11,7 +11,7 @@ describe('Model', function() {
     TestModel1 = Model.define((function(){
       var i = 0;
       return {
-        dataStore: new Model.MemoryStore(),
+        dataStore: { type: Model.MemoryStore },
         fields: {
           id: function() {i++; return i; },
           username: undefined,
@@ -135,7 +135,7 @@ describe('Model', function() {
       var TestModel = Model.define((function(){
         var i = 0;
         return {
-          dataStore: new Model.MemoryStore(),
+          dataStore: { type: Model.MemoryStore },
           fields: {
             id: function() { i++; return i; },
             username: undefined
@@ -157,7 +157,7 @@ describe('Model', function() {
       var TestModel = Model.define((function(){
         var i = 0;
         return {
-          dataStore: new Model.MemoryStore(),
+          dataStore: { type: Model.MemoryStore },
           fields: {
             id: function() { i++; return i; },
             username: undefined
@@ -183,7 +183,7 @@ describe('Model', function() {
       var TestModel = Model.define((function(){
         var i = 0;
         return {
-          dataStore: new Model.MemoryStore(),
+          dataStore: { type: Model.MemoryStore },
           fields: {
             id: function() { i++; return i; },
             username: undefined
@@ -208,7 +208,7 @@ describe('Model', function() {
       var TestModel = Model.define((function(){
         var i = 0;
         return {
-          dataStore: new Model.MemoryStore(),
+          dataStore: { type: Model.MemoryStore },
           fields: {
             id: function() { i++; return i; },
             username: undefined
@@ -232,7 +232,7 @@ describe('Model', function() {
       var TestModel = Model.define((function(){
         var i = 0;
         return {
-          dataStore: new Model.MemoryStore(),
+          dataStore: { type: Model.MemoryStore },
           fields: {
             id: function() { i++; return i; },
             username: undefined
@@ -255,7 +255,7 @@ describe('Model', function() {
       var TestModel = Model.define((function(){
         var i = 0;
         return {
-          dataStore: new Model.MemoryStore(),
+          dataStore: { type: Model.MemoryStore },
           fields: {
             id: function() { i++; return i; },
             username: undefined
@@ -276,7 +276,7 @@ describe('Model', function() {
       var TestModel = Model.define((function(){
         var i = 0;
         return {
-          dataStore: new Model.MemoryStore(),
+          dataStore: { type: Model.MemoryStore },
           fields: {
             id: function() { i++; return i; },
             username: undefined
@@ -303,64 +303,6 @@ describe('Model', function() {
     assert.ok("first" in json);
     assert.ok("last" in json);
     assert.ok("age" in json);
-  });
-
-  it('should be subclass-able', function() {
-    // Subclass, adding a new property
-    var TestModel2 = TestModel1.define({
-      fields: {
-        power: 'i can fly'
-      }
-    });
-    
-    // Ensure that all parent properties AND the new property are in the model.
-    var model = new TestModel2(); // id == 7
-    assert.equal(TestModel2, model.constructor);
-    assert.ok("id" in model);
-    assert.ok("username" in model);
-    assert.ok("first" in model);
-    assert.ok("last" in model);
-    assert.ok("name" in model);
-    assert.ok("power" in model);
-    
-    // Check default value for new property
-    assert.equal('i can fly', model.power);
-    
-    // Override default value.
-    model.power = 'i cannot fly';
-    assert.equal('i cannot fly', model.power);
-    
-    // Subclass the subclass, adding a new property
-    var TestModel3 = TestModel2.define({
-      fields: {
-        weakness: 'i cannot swim'
-      }
-    });
-    
-    // Set values for new properties...
-    model = new TestModel3({ // id == 8
-      power: 'punch hard',
-      weakness: 'pizza'
-    });
-    assert.equal(TestModel3, model.constructor);
-    
-    // Check local values of new properties
-    assert.equal('punch hard', model.power);
-    assert.equal('pizza', model.weakness);
-    
-    // Unset local values...
-    model.power = undefined;
-    model.weakness = undefined;
-    
-    // Check that defaults return...
-    assert.equal('i can fly', model.power, "Power was deleted so should be the default but is ", model.power);
-    assert.equal('i cannot swim', model.weakness);
-    
-    // Check that subclasses are maintaining their inheritance chain.
-    assert.ok(model instanceof TestModel3);
-    assert.ok(model instanceof TestModel2);
-    assert.ok(model instanceof TestModel1);
-    assert.ok(model instanceof Model);
   });
 
   it('should work with class-level database methods', function() {
@@ -469,7 +411,7 @@ describe('Model', function() {
 
   it('should allow user-defined primary key property', function() {
     var TestModel = Model.define({
-      dataStore: new Model.MemoryStore(),
+      dataStore: { type: Model.MemoryStore },
       primaryKey: "username",
       fields: {
         username: undefined,
