@@ -96,6 +96,16 @@ describe('Model', function() {
     assert.equal('John Doe', model2.name);
   });
 
+  it('should create model instances which do not effect each other', function() {
+    var one = new TestModel1();
+    var two = new TestModel1();
+
+    one.first = 'one';
+    two.first = 'two';
+
+    assert.notEqual(one.first, two.first);
+  });
+
   it('should define models with property setters', function() {
     var model = new TestModel1(); // id == 5
     assert.equal(1, model.age);
