@@ -22,7 +22,7 @@ Examples
 --------
 
 ```js
-var User = Tubbs.create({
+var User = Tubbs.define({
 
   // Persist our data with an in-memory store:
   dataStore: new Tubbs.MemoryStore(),
@@ -82,7 +82,7 @@ console.log(JSON.stringify(user));
 **Extend the User model as the Employee model**
 
 ```js
-var Employee = User.create({
+var Employee = User.define({
   dataStore: new Tubbs.MemoryStore(),
   title: "Layabout"
 });

@@ -8,7 +8,7 @@ describe('Model', function() {
   var TestModel1;
 
   before(function() {
-    TestModel1 = Model.create((function(){
+    TestModel1 = Model.define((function(){
       var i = 0;
       return {
         dataStore: new Model.MemoryStore(),
@@ -96,7 +96,7 @@ describe('Model', function() {
     assert.equal('John Doe', model2.name);
   });
 
-  it('should create models with property setters', function() {
+  it('should define models with property setters', function() {
     var model = new TestModel1(); // id == 5
     assert.equal(1, model.age);
     model.age = 10;
@@ -132,7 +132,7 @@ describe('Model', function() {
     });
 
     it('should emit when a model is saved', function(done) {
-      var TestModel = Model.create((function(){
+      var TestModel = Model.define((function(){
         var i = 0;
         return {
           dataStore: new Model.MemoryStore(),
@@ -154,7 +154,7 @@ describe('Model', function() {
     });
 
     it('should emit when a model is deleted', function(done) {
-      var TestModel = Model.create((function(){
+      var TestModel = Model.define((function(){
         var i = 0;
         return {
           dataStore: new Model.MemoryStore(),
@@ -180,7 +180,7 @@ describe('Model', function() {
 
   describe('class-level events', function() {
     it('should emit when properties change', function(done) {
-      var TestModel = Model.create((function(){
+      var TestModel = Model.define((function(){
         var i = 0;
         return {
           dataStore: new Model.MemoryStore(),
@@ -205,7 +205,7 @@ describe('Model', function() {
     });
 
     it('should emit when a specific property change', function(done) {
-      var TestModel = Model.create((function(){
+      var TestModel = Model.define((function(){
         var i = 0;
         return {
           dataStore: new Model.MemoryStore(),
@@ -229,7 +229,7 @@ describe('Model', function() {
     });
 
     it('should emit when a model is deleted', function(done) {
-      var TestModel = Model.create((function(){
+      var TestModel = Model.define((function(){
         var i = 0;
         return {
           dataStore: new Model.MemoryStore(),
@@ -252,7 +252,7 @@ describe('Model', function() {
     });
 
     it('should emit when a model is saved', function(done) {
-      var TestModel = Model.create((function(){
+      var TestModel = Model.define((function(){
         var i = 0;
         return {
           dataStore: new Model.MemoryStore(),
@@ -273,7 +273,7 @@ describe('Model', function() {
     });
 
     it('should emit when a model is created', function(done) {
-      var TestModel = Model.create((function(){
+      var TestModel = Model.define((function(){
         var i = 0;
         return {
           dataStore: new Model.MemoryStore(),
@@ -307,7 +307,7 @@ describe('Model', function() {
 
   it('should be subclass-able', function() {
     // Subclass, adding a new property
-    var TestModel2 = TestModel1.create({
+    var TestModel2 = TestModel1.define({
       fields: {
         power: 'i can fly'
       }
@@ -331,7 +331,7 @@ describe('Model', function() {
     assert.equal('i cannot fly', model.power);
     
     // Subclass the subclass, adding a new property
-    var TestModel3 = TestModel2.create({
+    var TestModel3 = TestModel2.define({
       fields: {
         weakness: 'i cannot swim'
       }
@@ -468,7 +468,7 @@ describe('Model', function() {
   });
 
   it('should allow user-defined primary key property', function() {
-    var TestModel = Model.create({
+    var TestModel = Model.define({
       dataStore: new Model.MemoryStore(),
       primaryKey: "username",
       fields: {

@@ -27,7 +27,7 @@ function PASS(model, cb, log) {
 describe('Model', function() {
 
   it('should validate required fields', function(done) {
-    var TestModel = Model.create({
+    var TestModel = Model.define({
       fields: {
         id: Guid.raw,
         username: undefined
@@ -82,7 +82,7 @@ describe('Model', function() {
   describe('`lengthOf` validator', function() {
     it('should throw an error when configured incorrectly', function() {
       assert.throws(function() {
-        Model.create({
+        Model.define({
           fields: {
             id: Guid.raw,
             username: undefined
@@ -96,7 +96,7 @@ describe('Model', function() {
     });
 
     describe('with `min` option set', function() {
-      var TestModel = Model.create({
+      var TestModel = Model.define({
         fields: {
           id: Guid.raw,
           username: undefined
@@ -137,7 +137,7 @@ describe('Model', function() {
     });
 
     describe('with `max` option set', function() {
-      var TestModel = Model.create({
+      var TestModel = Model.define({
         fields: {
           id: Guid.raw,
           username: undefined
@@ -177,7 +177,7 @@ describe('Model', function() {
     });
 
     describe('with `min` and `max` options set', function() {
-      var TestModel = Model.create({
+      var TestModel = Model.define({
         fields: {
           id: Guid.raw,
           username: undefined
@@ -223,7 +223,7 @@ describe('Model', function() {
       });
 
       describe('and `allowUndefined:true`', function() {
-        var TestModel = Model.create({
+        var TestModel = Model.define({
           fields: {
             id: Guid.raw,
             username: undefined
@@ -249,7 +249,7 @@ describe('Model', function() {
       });
 
       describe('and `allowNull:true`', function() {
-        var TestModel = Model.create({
+        var TestModel = Model.define({
           fields: {
             id: Guid.raw,
             username: undefined
@@ -279,7 +279,7 @@ describe('Model', function() {
   describe('`formatOf` validator', function() {
     it('should throw an error when configured incorrectly', function() {
       assert.throws(function() {
-        Model.create({
+        Model.define({
           fields: {
             id: Guid.raw,
             username: undefined
@@ -293,7 +293,7 @@ describe('Model', function() {
     });
 
     describe('with `with` option set', function() {
-      var TestModel = Model.create({
+      var TestModel = Model.define({
         fields: {
           id: Guid.raw,
           username: undefined
@@ -316,7 +316,7 @@ describe('Model', function() {
       });
 
       describe('and `allowNull:true`', function() {
-        var TestModel = Model.create({
+        var TestModel = Model.define({
           fields: {
             id: Guid.raw,
             username: undefined
@@ -344,7 +344,7 @@ describe('Model', function() {
     });
 
     describe('with `without` option set', function() {
-      var TestModel = Model.create({
+      var TestModel = Model.define({
         fields: {
           id: Guid.raw,
           username: undefined
@@ -371,7 +371,7 @@ describe('Model', function() {
 
   describe('`if` option', function() {
 
-    var TestModel = Model.create({
+    var TestModel = Model.define({
       fields: {
         username: undefined
       },
@@ -402,7 +402,7 @@ describe('Model', function() {
   });
 
   describe('`unless` option', function() {
-    var TestModel = Model.create({
+    var TestModel = Model.define({
       fields: {
         username: undefined
       },
