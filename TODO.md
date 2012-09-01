@@ -17,8 +17,8 @@ TODO
 
 * Figure out methodology for setting data w/o firing events.
 
-  model.shhh('name', 'Dan');
-  model.quiet('name', 'Dan');
-  model._name = 'Dan';
+  X model.shhh('name', 'Dan');
+  X model.quiet('name', 'Dan');
+  √ model._name = 'Dan';
 
 
