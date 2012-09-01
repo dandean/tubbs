@@ -87,10 +87,12 @@ user.on('change', function(property, old, value) {
 user.on('change:name', function(old, value) {
   // When the "name" property changes on a specific User instance
 });
+```
 
 
 **Observe model creation and deletion and save**
 
+```js
 User.on('new', function(instance) {
   // When any User model is created.
 });
@@ -112,6 +114,7 @@ user.on('save', function(instance) {
 user.on('delete', function(instance) {
   // When a specific User model is deleted.
 });
+```
 
 
 **Serialize the instance to pure JSON**
