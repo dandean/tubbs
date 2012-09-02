@@ -96,6 +96,11 @@ describe('Model', function() {
     assert.equal('John Doe', model2.name);
   });
 
+  it('should create model definitions which do not affect each other', function() {
+    var X = Model.define();
+    assert.equal(0, Object.keys(X.prototype.fields).length, 'Model should have zero fields but does not.');
+  });
+
   it('should create model instances which do not effect each other', function() {
     var one = new TestModel1();
     var two = new TestModel1();
