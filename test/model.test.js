@@ -4,34 +4,30 @@ var Model = require('../index');
 
 describe('Model', function() {
 
-  var id = 0;
   var TestModel1;
 
   before(function() {
-    TestModel1 = Model.define((function(){
-      var i = 0;
-      return {
-        dataStore: { type: Model.MemoryStore },
-        fields: {
-          id: function() {i++; return i; },
-          username: undefined,
-          age: {
-            default: 1,
-            set: function(value) {
-              value = parseInt(value, 10);
-              return (isNaN(value)) ? 30 : value ;
-            }
-          },
-          first: 'John',
-          last: 'Doe'
-        },
-        virtual: {
-          name: function() {
-            return ((this.first || '') + ' ' + (this.last || '')).trim();
+    TestModel1 = Model.define({
+      dataStore: { type: Model.MemoryStore },
+      fields: {
+        id: undefined,
+        username: undefined,
+        age: {
+          default: 1,
+          set: function(value) {
+            value = parseInt(value, 10);
+            return (isNaN(value)) ? 30 : value ;
           }
+        },
+        first: 'John',
+        last: 'Doe'
+      },
+      virtual: {
+        name: function() {
+          return ((this.first || '') + ' ' + (this.last || '')).trim();
         }
-      };
-    })());
+      }
+    });
   });
 
   it('should be defined correctly', function() {
@@ -46,10 +42,10 @@ describe('Model', function() {
     assert.equal(6, Object.keys(TestModel1.prototype).length);
     
     // Check for presence of defined properties on instance...
-    var model = new TestModel1(); // id == 1
+    var model = new TestModel1();
     
     assert.equal(TestModel1, model.constructor);
-    assert.equal(1, model.id);
+
     assert.ok("id" in model);
     assert.ok("username" in model);
     assert.ok("first" in model);
@@ -64,7 +60,6 @@ describe('Model', function() {
     model1 = new TestModel1(); // id == 2
     
     // Check all default values...
-    assert.equal(2, model1.id);
     assert.equal(undefined, model1.username);
     assert.equal('John', model1.first);
     assert.equal('Doe', model1.last);
@@ -81,14 +76,15 @@ describe('Model', function() {
     assert.equal('John Doe', model1.name);
     
     // Check function-type defaults for re-execution...
-    model1.id = undefined; // id == 3
-    assert.equal(3, model1.id, 'Function-default should have executed, incrementing the ID.');
+    // TODO: do this on a non-ID property
+    // model1.id = undefined; // id == 3
+    // assert.equal(3, model1.id, 'Function-default should have executed, incrementing the ID.');
 
     // Instantiate with a non-default value...
     model2 = new TestModel1({ first: 'Rad' }); // id == 4
     assert.equal('Rad', model2.first);
     assert.equal('Rad Doe', model2.name);
-    assert.equal(4, model2.id, 'Function-default should have executed, incrementing the ID.');
+    // assert.equal(4, model2.id, 'Function-default should have executed, incrementing the ID.');
 
     // Unset value, ensure defaults...
     model2.first = undefined;
@@ -98,7 +94,7 @@ describe('Model', function() {
 
   it('should create model definitions which do not affect each other', function() {
     var X = Model.define();
-    assert.equal(0, Object.keys(X.prototype.fields).length, 'Model should have zero fields but does not.');
+    assert.equal(1, Object.keys(X.prototype.fields).length, 'Bare bones model should have one field but does not.');
   });
 
   it('should create model instances which do not effect each other', function() {
@@ -147,16 +143,13 @@ describe('Model', function() {
     });
 
     it('should emit when a model is saved', function(done) {
-      var TestModel = Model.define((function(){
-        var i = 0;
-        return {
-          dataStore: { type: Model.MemoryStore },
-          fields: {
-            id: function() { i++; return i; },
-            username: undefined
-          }
-        };
-      })());
+      var TestModel = Model.define({
+        dataStore: { type: Model.MemoryStore },
+        fields: {
+          id: undefined,
+          username: undefined
+        }
+      });
 
       var model = new TestModel();
 
@@ -169,16 +162,13 @@ describe('Model', function() {
     });
 
     it('should emit when a model is deleted', function(done) {
-      var TestModel = Model.define((function(){
-        var i = 0;
-        return {
-          dataStore: { type: Model.MemoryStore },
-          fields: {
-            id: function() { i++; return i; },
-            username: undefined
-          }
-        };
-      })());
+      var TestModel = Model.define({
+        dataStore: { type: Model.MemoryStore },
+        fields: {
+          id: undefined,
+          username: undefined
+        }
+      });
 
       var model = new TestModel();
 
@@ -195,16 +185,13 @@ describe('Model', function() {
 
   describe('class-level events', function() {
     it('should emit when properties change', function(done) {
-      var TestModel = Model.define((function(){
-        var i = 0;
-        return {
-          dataStore: { type: Model.MemoryStore },
-          fields: {
-            id: function() { i++; return i; },
-            username: undefined
-          }
-        };
-      })());
+      var TestModel = Model.define({
+        dataStore: { type: Model.MemoryStore },
+        fields: {
+          id: undefined,
+          username: undefined
+        }
+      });
 
       var model = new TestModel();
 
@@ -220,16 +207,13 @@ describe('Model', function() {
     });
 
     it('should emit when a specific property change', function(done) {
-      var TestModel = Model.define((function(){
-        var i = 0;
-        return {
-          dataStore: { type: Model.MemoryStore },
-          fields: {
-            id: function() { i++; return i; },
-            username: undefined
-          }
-        };
-      })());
+      var TestModel = Model.define({
+        dataStore: { type: Model.MemoryStore },
+        fields: {
+          id: undefined,
+          username: undefined
+        }
+      });
 
       var model = new TestModel();
 
@@ -244,16 +228,13 @@ describe('Model', function() {
     });
 
     it('should emit when a model is deleted', function(done) {
-      var TestModel = Model.define((function(){
-        var i = 0;
-        return {
-          dataStore: { type: Model.MemoryStore },
-          fields: {
-            id: function() { i++; return i; },
-            username: undefined
-          }
-        };
-      })());
+      var TestModel = Model.define({
+        dataStore: { type: Model.MemoryStore },
+        fields: {
+          id: undefined,
+          username: undefined
+        }
+      });
 
       TestModel.on('delete', function(instance) {
         assert.equal(model, instance);
@@ -267,16 +248,13 @@ describe('Model', function() {
     });
 
     it('should emit when a model is saved', function(done) {
-      var TestModel = Model.define((function(){
-        var i = 0;
-        return {
-          dataStore: { type: Model.MemoryStore },
-          fields: {
-            id: function() { i++; return i; },
-            username: undefined
-          }
-        };
-      })());
+      var TestModel = Model.define({
+        dataStore: { type: Model.MemoryStore },
+        fields: {
+          id: undefined,
+          username: undefined
+        }
+      });
 
       TestModel.on('save', function(instance) {
         assert.equal(model, instance);
@@ -288,16 +266,13 @@ describe('Model', function() {
     });
 
     it('should emit when a model is created', function(done) {
-      var TestModel = Model.define((function(){
-        var i = 0;
-        return {
-          dataStore: { type: Model.MemoryStore },
-          fields: {
-            id: function() { i++; return i; },
-            username: undefined
-          }
-        };
-      })());
+      var TestModel = Model.define({
+        dataStore: { type: Model.MemoryStore },
+        fields: {
+          id: undefined,
+          username: undefined
+        }
+      });
 
       TestModel.on('new', function(instance) {
         assert.ok(instance instanceof TestModel);
@@ -434,10 +409,8 @@ describe('Model', function() {
       }
     });
     
-    var model = new TestModel({
-      username: "dandean"
-    });
-    
+    var model = new TestModel();
+
     saveModel();
     
     function saveModel() {
@@ -447,10 +420,10 @@ describe('Model', function() {
     }
     
     function findModelByCustomPrimaryKey() {
-      TestModel.find('dandean', function(e, result) {
+      TestModel.find(model.id, function(e, result) {
         assert.equal(null, e);
         assert.ok(result instanceof TestModel);
-        assert.equal('dandean', result.username);
+        assert.equal(result.id, result.username);
       });
     }
   });
