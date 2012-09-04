@@ -284,15 +284,31 @@ describe('Model', function() {
 
   });
 
-  it('should serialize models to JSON', function() {
-    var model = new TestModel1(); // id == 6
+  it('should serialize models to JSON', function(done) {
+    var TestModel = Model.define({
+      dataStore: { type: Model.MemoryStore },
+      fields: {
+        id: undefined,
+        username: undefined,
+        first: 'John',
+        last: 'Doe'
+      }
+    });
+
+    var model = new TestModel();
     var json = model.toJSON();
-    assert.equal(5, Object.keys(json).length);
-    assert.ok("id" in json);
+    assert.equal(3, Object.keys(json).length);
     assert.ok("username" in json);
     assert.ok("first" in json);
     assert.ok("last" in json);
-    assert.ok("age" in json);
+
+    // ID will not be present because model has not been saved yet.
+    assert.ok("id" in json === false);
+
+    model.save(function(e, result) {
+      assert.ok('id' in model.toJSON());
+      done();
+    });
   });
 
   it('should work with class-level database methods', function() {
