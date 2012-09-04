@@ -57,7 +57,7 @@ describe('Model', function() {
     var model1,
         model2;
 
-    model1 = new TestModel1(); // id == 2
+    model1 = new TestModel1();
     
     // Check all default values...
     assert.equal(undefined, model1.username);
@@ -77,11 +77,11 @@ describe('Model', function() {
     
     // Check function-type defaults for re-execution...
     // TODO: do this on a non-ID property
-    // model1.id = undefined; // id == 3
+    // model1.id = undefined;
     // assert.equal(3, model1.id, 'Function-default should have executed, incrementing the ID.');
 
     // Instantiate with a non-default value...
-    model2 = new TestModel1({ first: 'Rad' }); // id == 4
+    model2 = new TestModel1({ first: 'Rad' });
     assert.equal('Rad', model2.first);
     assert.equal('Rad Doe', model2.name);
     // assert.equal(4, model2.id, 'Function-default should have executed, incrementing the ID.');
@@ -108,7 +108,7 @@ describe('Model', function() {
   });
 
   it('should define models with property setters', function() {
-    var model = new TestModel1(); // id == 5
+    var model = new TestModel1();
     assert.equal(1, model.age);
     model.age = 10;
     assert.equal(10, model.age);
