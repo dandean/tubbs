@@ -2,7 +2,7 @@
   "author": "Dan Dean <@dandean> (http://dandean.com)",
   "name": "tubbs",
   "description": "Models with an API that I actually like.",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "repository": {
     "type": "git",
     "url": "git://github.com/dandean/tubbs.git"
