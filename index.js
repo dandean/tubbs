@@ -191,12 +191,14 @@ function Tubbs(fn, options) {
 
     primaryKey: {
       get: function() { return primary; },
-      set: function(value) { primary = value; }
+      set: function(value) { primary = value; },
+      enumerable: true
     },
 
     dataStore: {
       get: function() { return dataStore; },
-      set: function(value) { primary = dataStore; }
+      set: function(value) { primary = dataStore; },
+      enumerable: true
     },
 
     find: {
