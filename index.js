@@ -113,14 +113,17 @@ function Tubbs(fn, options) {
     },
 
     isNew: {
-      value: function() {
+      get: function() {
         return typeof this.get(primary) == 'undefined';
       }
     },
 
     id: {
-      value: function() {
+      get: function() {
         return this.isNew ? this.get(primary) : cid ;
+      },
+      set: function(value) {
+        this.setValue(primary, value);
       },
       enumerable: true
     },
