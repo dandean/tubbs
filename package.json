@@ -14,10 +14,13 @@
   },
   "dependencies": {
     "guid": "*",
-    "eventemitter2": "*"
+    "emitter-component": "*"
   },
   "devDependencies": {
-    "mocha": "*"
+    "mocha": "*",
+    "express": "*",
+    "browserify": "*",
+    "mustache": "*"
   },
   "keywords": ["data", "model", "mustache", "validation", "validate", "nosql", "json"]
 }

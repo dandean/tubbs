@@ -1,9 +1,12 @@
 REPORTER = dot
 
 test:
-	make test_node
+	mocha
 
-test_node:
-	./node_modules/.bin/mocha
+server:
+	node test/server/server.js
+
+show:
+	open http://localhost:3000
 
 .PHONY: test

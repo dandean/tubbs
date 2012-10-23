@@ -1,3 +1,5 @@
+return;
+
 var assert = require('assert');
 var Model = require('../index');
 
