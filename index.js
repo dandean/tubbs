@@ -254,16 +254,21 @@ function Tubbs(fn, options) {
     }
   });
 
-  // TODO:
-  // - Start Testing DataStore API.
-  // - Make sure Model's and their isntances do no clobber each other.
-  // - Data Store
-  //   - class-level methods
-  //   - instance-level methods
-
   // Make fn and fn.prototype an Emitter
   if (!isEventEmitter(fn)) Emitter(fn);
   if (!isEventEmitter(fn.prototype)) Emitter(fn.prototype)
+
+  // Class-level events emit whenever an instance event is emitted:
+  var emit = fn.prototype.emit;
+  fn.prototype.emit = function() {
+    // Emit the instance event:
+    emit.apply(this, arguments);
+
+    // Shuffle args for class-level event:
+    // First arg should be the same, inject instance as second arg:
+    var args = [arguments[0], this].concat(Array.prototype.slice.call(arguments, 1));
+    fn.emit.apply(fn, args);
+  }
 
   return fn;
 }

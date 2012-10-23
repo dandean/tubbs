@@ -167,6 +167,180 @@ describe('Tubbs', function() {
       });
     });
   });
+
+  describe('instance "change" events', function() {
+    it('should emit for specific property via `#set`', function(done) {
+      function User(data, options) {
+        this.setData(data);
+      }
+
+      Tubbs(User, {
+        primaryKey: 'id',
+        dataStore: new Memory(User)
+      });
+
+      var user = new User();
+      user.on('change:username', function(newValue, oldValue) {
+        assert.strictEqual('rad', newValue);
+        assert.strictEqual(undefined, oldValue);
+        done();
+      });
+
+      user.set('username', 'rad');
+    });
+
+    it('should emit for any property via `#set`', function(done) {
+      function User(data, options) {
+        this.setData(data);
+      }
+
+      Tubbs(User, {
+        primaryKey: 'id',
+        dataStore: new Memory(User)
+      });
+
+      var user = new User();
+      user.on('change', function(property, newValue, oldValue) {
+        assert.strictEqual('username', property);
+        assert.strictEqual('rad', newValue);
+        assert.strictEqual(undefined, oldValue);
+        done();
+      });
+
+      user.set('username', 'rad');
+    });
+
+    it('should emit for specific property via setter', function(done) {
+      function User(data, options) {
+        this.setData(data);
+      }
+
+      Tubbs(User, {
+        primaryKey: 'id',
+        dataStore: new Memory(User),
+        basicProperties: ['username']
+      });
+
+      var user = new User();
+      user.on('change:username', function(newValue, oldValue) {
+        assert.strictEqual('rad', newValue);
+        assert.strictEqual(undefined, oldValue);
+        done();
+      });
+
+      user.username = 'rad';
+    });
+
+    it('should emit for any property via setter', function(done) {
+      function User(data, options) {
+        this.setData(data);
+      }
+
+      Tubbs(User, {
+        primaryKey: 'id',
+        dataStore: new Memory(User),
+        basicProperties: ['username']
+      });
+
+      var user = new User();
+      user.on('change', function(property, newValue, oldValue) {
+        assert.strictEqual('username', property);
+        assert.strictEqual('rad', newValue);
+        assert.strictEqual(undefined, oldValue);
+        done();
+      });
+
+      user.username = 'rad';
+    });
+  });
+
+  describe('class "change" events', function() {
+    it('should emit for specific property via `#set`', function(done) {
+      function User(data, options) {
+        this.setData(data);
+      }
+
+      Tubbs(User, {
+        primaryKey: 'id',
+        dataStore: new Memory(User)
+      });
+
+      User.on('change:username', function(instance, newValue, oldValue) {
+        assert.strictEqual('rad', newValue);
+        assert.strictEqual(undefined, oldValue);
+        done();
+      });
+
+      var user = new User();
+      user.set('username', 'rad');
+    });
+
+    it('should emit for any property via `#set`', function(done) {
+      function User(data, options) {
+        this.setData(data);
+      }
+
+      Tubbs(User, {
+        primaryKey: 'id',
+        dataStore: new Memory(User)
+      });
+
+      User.on('change', function(instance, property, newValue, oldValue) {
+        assert.strictEqual('username', property);
+        assert.strictEqual('rad', newValue);
+        assert.strictEqual(undefined, oldValue);
+        done();
+      });
+
+      var user = new User();
+      user.set('username', 'rad');
+    });
+
+    it('should emit for specific property via setter', function(done) {
+      function User(data, options) {
+        this.setData(data);
+      }
+
+      Tubbs(User, {
+        primaryKey: 'id',
+        dataStore: new Memory(User),
+        basicProperties: ['username']
+      });
+
+      User.on('change:username', function(instance, newValue, oldValue) {
+        assert.strictEqual('rad', newValue);
+        assert.strictEqual(undefined, oldValue);
+        done();
+      });
+
+      var user = new User();
+      user.username = 'rad';
+    });
+
+    it('should emit for any property via setter', function(done) {
+      function User(data, options) {
+        this.setData(data);
+      }
+
+      Tubbs(User, {
+        primaryKey: 'id',
+        dataStore: new Memory(User),
+        basicProperties: ['username']
+      });
+
+      User.on('change', function(instance, property, newValue, oldValue) {
+        assert.strictEqual('username', property);
+        assert.strictEqual('rad', newValue);
+        assert.strictEqual(undefined, oldValue);
+        done();
+      });
+
+      var user = new User();
+      user.username = 'rad';
+    });
+  });
+
+
 });
 
 
