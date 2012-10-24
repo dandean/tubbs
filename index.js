@@ -165,8 +165,8 @@ function Tubbs(fn, options) {
             if (cb) cb(e);
             return;
           }
+          if (cb) cb(null, t);
           t.emit('delete');
-          cb(null, t);
         });
       },
       enumerable: true

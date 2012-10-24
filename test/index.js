@@ -446,6 +446,48 @@ describe('Tubbs', function() {
     user.save();
   });
 
+  it('should emit instance "delete" events', function(done) {
+    function User(data, options) {
+      this.setData(data);
+    }
+
+    Tubbs(User, {
+      primaryKey: 'id',
+      dataStore: new Memory(User)
+    });
+
+    var user = new User();
+    user.on('delete', function() {
+      done();
+    });
+
+    user.save(function() {
+      user.delete();
+    });
+  });
+
+  it('should emit class "delete" events', function(done) {
+    function User(data, options) {
+      this.setData(data);
+    }
+
+    Tubbs(User, {
+      primaryKey: 'id',
+      dataStore: new Memory(User)
+    });
+
+    var user = new User();
+
+    User.on('delete', function(result) {
+      assert.equal(user, result);
+      done();
+    });
+
+    user.save(function() {
+      user.delete();
+    });
+  });
+
 
 });
 
