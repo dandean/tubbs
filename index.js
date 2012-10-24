@@ -150,7 +150,7 @@ function Tubbs(fn, options) {
             if (cb) cb(e);
             return;
           }
-          cb(null, t);
+          if (cb) cb(null, t);
           t.emit('save');
           fn.emit('save', t);
         });
