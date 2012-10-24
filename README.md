@@ -8,11 +8,9 @@ Tubbs
 Features
 --------
 
-* Configurable default property values
-* Virtual (non-serialized) properties
 * ActiveModel-style validation
 * Observe property value changes
-* Observe creation and deletion and save
+* Observe deletion and save
 * Abstract data store interface. So far:
   * In-memory (built-in: `Tubbs.MemoryStore`)
   * Riak (via tubbs-riakstorage - server-side only at the moment)
@@ -23,27 +21,24 @@ Examples
 --------
 
 ```js
-var User = Tubbs.define({
+function User(data) {
+  this.setData(data);
+}
 
-  // Persist our data with an in-memory store:
-  dataStore: { type: Tubbs.MemoryStore },
-
-  fields: {
-    username: undefined,
-    first: '',
-    last: '',
-  },
-
-  virtual: {
-    name: function() {
-      return ((this.first || '') + ' ' + (this.last || '')).trim();
-    }
-  },
-
+Tubbs(User, {
+  dataStore: new Memory(User),
+  basicProperties: ['username', 'first', 'last'],
   validation: [
-    Tubbs.Validate.required("username"),
-    Tubbs.Validate.lengthOf("username", { min: 5 })
-  ]
+    Validate.required("username"),
+    Validate.lengthOf("username", { min: 5 })
+  ],
+});
+
+Object.defineProperty(User, 'name', {
+  get: function() {
+    return ((this.first || '') + ' ' + (this.last || '')).trim();
+  },
+  enumerable: true
 });
 ```
 
@@ -93,10 +88,6 @@ user.on('change:name', function(old, value) {
 **Observe model creation and deletion and save**
 
 ```js
-User.on('new', function(instance) {
-  // When any User model is created.
-});
-
 User.on('save', function(instance) {
   // When any User model is saved.
 });
