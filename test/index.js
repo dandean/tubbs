@@ -407,6 +407,46 @@ describe('Tubbs', function() {
       user.username = 'rad';
     });
   });
+
+  it('should emit instance "save" events', function(done) {
+    function User(data, options) {
+      this.setData(data);
+    }
+
+    Tubbs(User, {
+      primaryKey: 'id',
+      dataStore: new Memory(User)
+    });
+
+    var user = new User();
+    user.on('save', function() {
+      done();
+    });
+
+    user.save();
+  });
+
+  it('should emit class "save" events', function(done) {
+    function User(data, options) {
+      this.setData(data);
+    }
+
+    Tubbs(User, {
+      primaryKey: 'id',
+      dataStore: new Memory(User)
+    });
+
+    var user = new User();
+
+    User.on('save', function(result) {
+      assert.equal(user, result);
+      done();
+    });
+
+    user.save();
+  });
+
+
 });
 
 
