@@ -168,6 +168,74 @@ describe('Tubbs', function() {
     });
   });
 
+  it('should create instances with unique client id\'s', function() {
+    function User(data, options) {
+      this.setData(data);
+    }
+
+    Tubbs(User, {
+      primaryKey: 'id',
+      dataStore: new Memory(User)
+    });
+
+    var user1 = new User();
+    var user2 = new User();
+    assert.notEqual(user1.id, user2.id);
+  });
+
+  it('should have a client id until saved', function(done) {
+    function User(data, options) {
+      this.setData(data);
+    }
+
+    Tubbs(User, {
+      primaryKey: 'id',
+      dataStore: new Memory(User)
+    });
+
+    var user = new User();
+    assert.strictEqual(true, user.isNew);
+
+    var clientId = user.id;
+    user.save(function(e, saveResult) {
+      assert.strictEqual(false, user.isNew);
+      assert.notEqual(clientId, user.id);
+      done();
+    });
+  });
+
+  it('should set and get data via #set and #get', function() {
+    function User(data, options) {
+      this.setData(data);
+    }
+
+    Tubbs(User, {
+      primaryKey: 'id',
+      dataStore: new Memory(User)
+    });
+
+    var user = new User();
+    user.set('rad', 'cool');
+    assert.equal('cool', user.get('rad'));
+  });
+
+  it('should set and get data via setters and getters', function() {
+    function User(data, options) {
+      this.setData(data);
+    }
+
+    Tubbs(User, {
+      primaryKey: 'id',
+      basicProperties: ['rad'],
+      dataStore: new Memory(User)
+    });
+
+    var user = new User();
+    user.rad = 'cool';
+    assert.equal('cool', user.get('rad'));
+    assert.equal('cool', user.rad);
+  });
+
   describe('instance "change" events', function() {
     it('should emit for specific property via `#set`', function(done) {
       function User(data, options) {
@@ -339,8 +407,6 @@ describe('Tubbs', function() {
       user.username = 'rad';
     });
   });
-
-
 });
 
 
