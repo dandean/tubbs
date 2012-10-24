@@ -9,7 +9,7 @@ if (typeof window != 'undefined') window.__require = require;
 describe('Tubbs', function() {
 
   it('should decorate a Function', function() {
-    function User(data, options) {
+    function User(data) {
       this.setData(data);
     }
 
@@ -29,7 +29,7 @@ describe('Tubbs', function() {
 
   it('should decorate a Function\'s prototype', function() {
     // GENERIC USER
-    function User(data, options) {
+    function User(data) {
       this.setData(data);
     }
 
@@ -56,73 +56,10 @@ describe('Tubbs', function() {
     ].forEach(function(name) {
       assert.ok(name in user);
     });
-
-    // ORGANIZATION
-    // function Organization(data, options) {
-    //   Tubbs.apply(this, arguments);
-    // }
-
-    // Organization.prototype = Object.create(Tubbs.prototype, {
-    //   __dataStore__: {
-    //     value: new Memory(Organization, { url: '/organizations' })
-    //   },
-
-    //   __primary__: { value: 'id' },
-
-    //   // Basic getters and setters
-    //   __fields__: {
-    //     value: ['name','url']
-    //   },
-
-    //   User: {
-    //     get: function() {
-    //       if (this.__userModel) return this.__userModel;
-    //       if (this.isNew) throw new Error();
-
-    //       // TODO: create the model, assign it and return it.
-    //       var id = this.id;
-
-    //       function OrganizationUser(data, options) {
-    //         User.apply(this, arguments);
-    //       }
-
-    //       OrganizationUser.prototype = Object.create(User.prototype);
-
-    //       Tubbs(OrganizationUser, {
-    //         dataStore: new Memory(OrganizationUser, {
-    //           url: '/organizations' + id + '/users'
-    //         })
-    //       });
-
-    //       return this.__userModel = OrganizationUser;
-    //     }
-    //   }
-
-    // });
-
-    // // Class-level Data Source Methods and the constructor reference
-    // Tubbs.decorate(Organization);
-
-
-
-
-
-
-
-
-
-
-
-
-    // User.where();
-
-    // var x = new User();
-    // x.save();
-    // x.fullName;
   });
 
   it('decorations should not clobber each other', function() {
-    function Type1(data, options) {
+    function Type1(data) {
       this.setData(data);
     }
 
@@ -131,7 +68,7 @@ describe('Tubbs', function() {
       dataStore: new Memory(Type1)
     });
 
-    function Type2(data, options) {
+    function Type2(data) {
       this.setData(data);
     }
 
@@ -145,7 +82,7 @@ describe('Tubbs', function() {
   });
 
   it('should save and find data', function(done) {
-    function User(data, options) {
+    function User(data) {
       this.setData(data);
     }
 
@@ -169,7 +106,7 @@ describe('Tubbs', function() {
   });
 
   it('should create instances with unique client id\'s', function() {
-    function User(data, options) {
+    function User(data) {
       this.setData(data);
     }
 
@@ -184,7 +121,7 @@ describe('Tubbs', function() {
   });
 
   it('should have a client id until saved', function(done) {
-    function User(data, options) {
+    function User(data) {
       this.setData(data);
     }
 
@@ -205,7 +142,7 @@ describe('Tubbs', function() {
   });
 
   it('should set and get data via #set and #get', function() {
-    function User(data, options) {
+    function User(data) {
       this.setData(data);
     }
 
@@ -220,7 +157,7 @@ describe('Tubbs', function() {
   });
 
   it('should set and get data via setters and getters', function() {
-    function User(data, options) {
+    function User(data) {
       this.setData(data);
     }
 
@@ -238,7 +175,7 @@ describe('Tubbs', function() {
 
   describe('instance "change" events', function() {
     it('should emit for specific property via `#set`', function(done) {
-      function User(data, options) {
+      function User(data) {
         this.setData(data);
       }
 
@@ -258,7 +195,7 @@ describe('Tubbs', function() {
     });
 
     it('should emit for any property via `#set`', function(done) {
-      function User(data, options) {
+      function User(data) {
         this.setData(data);
       }
 
@@ -279,7 +216,7 @@ describe('Tubbs', function() {
     });
 
     it('should emit for specific property via setter', function(done) {
-      function User(data, options) {
+      function User(data) {
         this.setData(data);
       }
 
@@ -300,7 +237,7 @@ describe('Tubbs', function() {
     });
 
     it('should emit for any property via setter', function(done) {
-      function User(data, options) {
+      function User(data) {
         this.setData(data);
       }
 
@@ -324,7 +261,7 @@ describe('Tubbs', function() {
 
   describe('class "change" events', function() {
     it('should emit for specific property via `#set`', function(done) {
-      function User(data, options) {
+      function User(data) {
         this.setData(data);
       }
 
@@ -344,7 +281,7 @@ describe('Tubbs', function() {
     });
 
     it('should emit for any property via `#set`', function(done) {
-      function User(data, options) {
+      function User(data) {
         this.setData(data);
       }
 
@@ -365,7 +302,7 @@ describe('Tubbs', function() {
     });
 
     it('should emit for specific property via setter', function(done) {
-      function User(data, options) {
+      function User(data) {
         this.setData(data);
       }
 
@@ -386,7 +323,7 @@ describe('Tubbs', function() {
     });
 
     it('should emit for any property via setter', function(done) {
-      function User(data, options) {
+      function User(data) {
         this.setData(data);
       }
 
@@ -409,7 +346,7 @@ describe('Tubbs', function() {
   });
 
   it('should emit instance "save" events', function(done) {
-    function User(data, options) {
+    function User(data) {
       this.setData(data);
     }
 
@@ -427,7 +364,7 @@ describe('Tubbs', function() {
   });
 
   it('should emit class "save" events', function(done) {
-    function User(data, options) {
+    function User(data) {
       this.setData(data);
     }
 
@@ -447,7 +384,7 @@ describe('Tubbs', function() {
   });
 
   it('should emit instance "delete" events', function(done) {
-    function User(data, options) {
+    function User(data) {
       this.setData(data);
     }
 
@@ -467,7 +404,7 @@ describe('Tubbs', function() {
   });
 
   it('should emit class "delete" events', function(done) {
-    function User(data, options) {
+    function User(data) {
       this.setData(data);
     }
 
@@ -489,7 +426,7 @@ describe('Tubbs', function() {
   });
 
   it('should delete by id from class `delete()` method', function(done) {
-    function User(data, options) {
+    function User(data) {
       this.setData(data);
     }
 
@@ -512,7 +449,7 @@ describe('Tubbs', function() {
 
   describe('with custom primary key', function() {
     it('should get/set it correctly', function(done) {
-      function User(data, options) {
+      function User(data) {
         this.setData(data);
       }
 
