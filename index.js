@@ -46,11 +46,25 @@ var createId = (function() {
 // Take a function and mixes in model functionality.
 function Tubbs(fn, options) {
   var primary = getAndDelete(options, 'primaryKey', null);
-  var cid = 'cid' + createId();
   var dataStore = getAndDelete(options, 'dataStore', new MemoryStore());
 
   // Basic instance property descriptor:
   var descriptor = {
+    // Instance prototype has a getter which creates a __cid__ property
+    // on the instance itself. Once this is called it will be ignored.
+    __cid__: {
+      get: function() {
+        if (!this.hasOwnProperty('__cid__')) {
+          var cid;
+          Object.defineProperty(this, '__cid__', {
+            value: cid = ('cid' + createId())
+          });
+          return cid;
+        }
+        return this.__cid__;
+      }
+    },
+
     toJSON: {
       value: function() {
         var json = {};
@@ -120,7 +134,7 @@ function Tubbs(fn, options) {
 
     id: {
       get: function() {
-        return this.isNew ? this.get(primary) : cid ;
+        return this.isNew ? this.__cid__ : this.get(primary) ;
       },
       set: function(value) {
         this.setValue(primary, value);
