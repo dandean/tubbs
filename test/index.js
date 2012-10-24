@@ -509,6 +509,34 @@ describe('Tubbs', function() {
       User.delete(user.id);
     });
   });
+
+  describe('with custom primary key', function() {
+    it('should get/set it correctly', function(done) {
+      function User(data, options) {
+        this.setData(data);
+      }
+
+      Tubbs(User, {
+        primaryKey: 'uuid',
+        dataStore: new Memory(User)
+      });
+
+      var user = new User();
+      assert.notEqual(user.id, user.get('uuid'));
+
+      user.save(function() {
+        assert.equal(user.id, user.get('uuid'));
+
+        user.id = 'radical';
+        assert.equal(user.id, user.get('uuid'));
+
+        user.set('uuid', 'super radical');
+        assert.equal(user.id, user.get('uuid'));
+
+        done();
+      });
+    });
+  });
 });
 
 
