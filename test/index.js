@@ -488,7 +488,27 @@ describe('Tubbs', function() {
     });
   });
 
+  it('should delete by id from class `delete()` method', function(done) {
+    function User(data, options) {
+      this.setData(data);
+    }
 
+    Tubbs(User, {
+      primaryKey: 'id',
+      dataStore: new Memory(User)
+    });
+
+    var user = new User();
+
+    User.on('delete', function(result) {
+      assert.equal(user, result);
+      done();
+    });
+
+    user.save(function() {
+      User.delete(user.id);
+    });
+  });
 });
 
 
