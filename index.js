@@ -152,7 +152,6 @@ function Tubbs(fn, options) {
           }
           if (cb) cb(null, t);
           t.emit('save');
-          fn.emit('save', t);
         });
       },
       enumerable: true
@@ -167,7 +166,6 @@ function Tubbs(fn, options) {
             return;
           }
           t.emit('delete');
-          fn.emit('delete', t);
           cb(null, t);
         });
       },
