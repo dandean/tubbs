@@ -3,23 +3,6 @@ var MemoryStore = require('./lib/memory');
 
 module.exports = Tubbs;
 
-/*
-
-GOALS
-=====
-
-1. Succinct API
-2. Mixin to *any* Function
-3. Mixin observability to singleton?
-
-*/
-
-/**
- * noop() -> undefined
- * Does nothing, used as a fallback when callback isn't provided.
-**/
-function noop() {}
-
 function isEventEmitter(object) {
   return object
     && 'on'   in object
