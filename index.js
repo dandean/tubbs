@@ -227,8 +227,16 @@ function Tubbs(fn, options) {
     },
 
     fetch: {
-      value: function(cb) {
-        dataStore.fetch(function(e) {
+      value: function(options, cb) {
+
+        if (options && Object.prototype.toString.call(options) == '[object Function]') {
+          // `options` is a function, which means it's actually the callback
+          // and no options were provided.
+          cb = options;
+          options = {};
+        }
+
+        dataStore.fetch(options, function(e) {
           if (cb) cb(e);
           if (!e) fn.emit('fetch');
         });
