@@ -2,18 +2,16 @@
   "author": "Dan Dean <@dandean> (http://dandean.com)",
   "name": "tubbs",
   "description": "Models with an API that I actually like.",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "repository": {
     "type": "git",
     "url": "git://github.com/dandean/tubbs.git"
   },
   "main": "index",
   "scripts": {
-    "test": "make test",
-    "prepublish" : "npm prune"
+    "test": "mocha"
   },
   "dependencies": {
-    "guid": "*",
     "emitter-component": "*"
   },
   "devDependencies": {
@@ -22,5 +20,14 @@
     "browserify": "*",
     "mustache": "*"
   },
-  "keywords": ["data", "model", "mustache", "validation", "validate", "nosql", "json"]
+  "keywords": [
+    "data",
+    "model",
+    "mustache",
+    "validation",
+    "validate",
+    "nosql",
+    "json"
+  ],
+  "license": "MIT"
 }
