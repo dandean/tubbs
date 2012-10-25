@@ -8,22 +8,12 @@
     "url": "git://github.com/dandean/tubbs.git"
   },
   "main": "index",
-  "scripts": {
-    "test": "mocha"
-  },
-  "dependencies": {
-    "emitter-component": "*"
-  },
-  "devDependencies": {
-    "mocha": "*",
-    "express": "*",
-    "browserify": "*",
-    "mustache": "*"
-  },
+  "scripts": { "test": "mocha" },
+  "dependencies": { "emitter-component": "*" },
+  "devDependencies": { "mocha": "*" },
   "keywords": [
     "data",
     "model",
-    "mustache",
     "validation",
     "validate",
     "nosql",
