@@ -1,6 +1,7 @@
 Tubbs
 =====
 
+![Build Status](https://travis-ci.org/dandean/json-tubbs.png)
 
 **Tubbs** is Data Model Layer which makes working with your data much easier.
 
