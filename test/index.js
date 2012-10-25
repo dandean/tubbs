@@ -474,4 +474,21 @@ describe('Tubbs', function() {
       });
     });
   });
+
+  it('should allow type methods to be overwritten', function(done) {
+    function User(data) {
+      this.setData(data);
+    }
+
+    Tubbs(User, {
+      primaryKey: 'id',
+      dataStore: new Memory(User)
+    });
+
+    User.fetch = function(cb) {
+      done();
+    };
+
+    User.fetch();
+  });
 });

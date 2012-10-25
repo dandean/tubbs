@@ -58,7 +58,8 @@ function Tubbs(fn, options) {
             json[key] = value;
         }
         return json;
-      }
+      },
+      writable: true
     },
 
     setData: {
@@ -82,7 +83,8 @@ function Tubbs(fn, options) {
         }
 
         return this;
-      }
+      },
+      writable: true
     },
 
     set: {
@@ -100,13 +102,15 @@ function Tubbs(fn, options) {
         if (descriptor && 'set' in descriptor) {
           descriptor.set.call(this, value, silent);
         } else this.setValue(name, value, silent);
-      }
+      },
+      writable: true
     },
 
     get: {
       value: function(name) {
         return this.__data__ ? this.__data__[name] : undefined ;
-      }
+      },
+      writable: true
     },
 
     isNew: {
@@ -137,7 +141,8 @@ function Tubbs(fn, options) {
           t.emit('save');
         });
       },
-      enumerable: true
+      enumerable: true,
+      writable: true
     },
 
     delete: {
@@ -152,7 +157,8 @@ function Tubbs(fn, options) {
           t.emit('delete');
         });
       },
-      enumerable: true
+      enumerable: true,
+      writable: true
     }
   };
 
@@ -200,21 +206,24 @@ function Tubbs(fn, options) {
       value: function(id, cb) {
         dataStore.find(id, cb);
       },
-      enumerable: true
+      enumerable: true,
+      writable: true
     },
 
     where: {
       value: function(args, filter, cb) {
         dataStore.where(args, filter, cb);
       },
-      enumerable: true
+      enumerable: true,
+      writable: true
     },
 
     all: {
       value: function(cb) {
         dataStore.all(cb);
       },
-      enumerable: true
+      enumerable: true,
+      writable: true
     },
 
     fetch: {
@@ -224,7 +233,8 @@ function Tubbs(fn, options) {
           if (!e) fn.emit('fetch');
         });
       },
-      enumerable: true
+      enumerable: true,
+      writable: true,
     },
 
     use: {
@@ -234,7 +244,8 @@ function Tubbs(fn, options) {
           if (!e) fn.emit('load');
         });
       },
-      enumerable: true
+      enumerable: true,
+      writable: true
     },
 
     delete: {
@@ -250,7 +261,8 @@ function Tubbs(fn, options) {
           });
         });
       },
-      enumerable: true
+      enumerable: true,
+      writable: true
     }
   });
 
