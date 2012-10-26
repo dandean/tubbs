@@ -247,7 +247,7 @@ function Tubbs(fn, options) {
 
     use: {
       value: function(data, cb) {
-        dataStore.use(function(e) {
+        dataStore.use(data, function(e) {
           if (cb) cb(e);
           if (!e) fn.emit('load');
         });

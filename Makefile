@@ -3,6 +3,9 @@ REPORTER = dot
 test:
 	mocha
 
+debug:
+	mocha debug
+
 server:
 	node test/server/server.js
 

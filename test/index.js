@@ -81,6 +81,31 @@ describe('Tubbs', function() {
     assert.notEqual(Type1.dataStore, Type2.dataStore);
   });
 
+  it('should load data from on object', function(done) {
+    var data = {
+      "rad": {
+        "id": 50,
+        "username": 'rad',
+        "firstName": 'Rad',
+        "lastName": 'Radical',
+        "email": 'rad@radical.com'
+      }
+    };
+
+    function User(data) {
+      this.setData(data);
+    }
+
+    Tubbs(User, {
+      primaryKey: 'id',
+      dataStore: new Memory(User)
+    });
+
+    User.use(data, function() {
+      done();
+    });
+  });
+
   it('should save and find data', function(done) {
     function User(data) {
       this.setData(data);
