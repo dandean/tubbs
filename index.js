@@ -137,7 +137,23 @@ function Tubbs(fn, options) {
       enumerable: true
     },
 
+    fetch: {
+      value: function(cb) {
+        var t = this;
+        cb = cb || function() {};
+        dataStore.fetchOne(this, function(e, result) {
+          if (e) return cb(e, t);
+          t.isDirty = false;
+          cb(null, t);
+          t.emit('fetch');
+        });
+      },
+      enumerable: true,
+      writable: true
+    },
+
     save: {
+      // TODO: emit "change" and "change:*" events when props change after save.
       value: function(cb) {
         var t = this;
         dataStore.save(this, function(e, result) {
