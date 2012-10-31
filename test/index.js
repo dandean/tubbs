@@ -198,6 +198,34 @@ describe('Tubbs', function() {
     assert.equal('cool', user.rad);
   });
 
+  describe('#isDirty', function() {
+    it('should be marked when a property changes', function(done) {
+      function User(data) {
+        this.setData(data);
+      }
+
+      Tubbs(User, {
+        primaryKey: 'id',
+        basicProperties: ['rad'],
+        dataStore: new Memory(User)
+      });
+
+      var user = new User();
+      var other = new User();
+      assert.strictEqual(false, user.isDirty);
+
+      user.rad = 'cool';
+      assert.strictEqual(true, user.isDirty);
+      assert.strictEqual(false, other.isDirty); // Make sure instances are atomic.
+
+      user.save(function(e) {
+        assert.strictEqual(false, user.isDirty);
+        done();
+      });
+    });
+  })
+
+
   describe('instance "change" events', function() {
     it('should emit for specific property via `#set`', function(done) {
       function User(data) {

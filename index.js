@@ -65,6 +65,7 @@ function Tubbs(fn, options) {
     setData: {
       value: function(data) {
         this.__data__ = data || {};
+        this.isDirty = false;
         return this;
       },
       configurable: true,
@@ -78,6 +79,7 @@ function Tubbs(fn, options) {
         data[name] = value;
 
         if (was !== value && !silent) {
+          this.isDirty = true;
           this.emit('change', name, value, was);
           this.emit('change:' + name, value, was);
         }
@@ -119,6 +121,12 @@ function Tubbs(fn, options) {
       }
     },
 
+    isDirty: {
+      value: false,
+      enumerable: true,
+      writable: true
+    },
+
     id: {
       get: function() {
         return this.isNew ? this.__cid__ : this.get(primary) ;
@@ -137,6 +145,7 @@ function Tubbs(fn, options) {
             if (cb) cb(e);
             return;
           }
+          t.isDirty = false;
           if (cb) cb(null, t);
           t.emit('save');
         });
