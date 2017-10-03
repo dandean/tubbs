@@ -10,7 +10,7 @@
   "main": "index",
   "scripts": { "test": "mocha" },
   "dependencies": { "emitter-component": "*" },
-  "devDependencies": { "mocha": "*" },
+  "devDependencies": { "mocha": ">=4.0.0" },
   "keywords": [
     "data",
     "model",
